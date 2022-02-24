@@ -1,6 +1,6 @@
 import os
+import platform
 
-# import platform
 # print('Nombre:', platform.uname())
 # print()
 # # print('Distribucion :', platform.linux_distribution())
@@ -8,12 +8,14 @@ import os
 # print('Nodo :', platform.node())
 # print('Procesador :', platform.processor())
 # print('Lanzamiento :', platform.release())
-# print('Systema :', platform.system())
+
 # print('Version :', platform.version())
 # print('Plataforma :', platform.platform())
 
 if __name__ == '__main__':
 
+    print('Systema :', platform.system())
+    
     directorio_home = os.path.expanduser('~')
     directorio_base = f"{directorio_home}/Descargas"
     existe_directorio_archivo = os.path.exists(directorio_base)
