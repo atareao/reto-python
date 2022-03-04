@@ -1,6 +1,6 @@
 # Reto 2
 
-El primer reto consiste en listar los archivos, y solo los archivos, que se encuentran en el directorio descargas del usuario. Tienes que tener en cuenta que el directorio descargas puede ser diferente para cada usuario. Además, en la primera línea deberá aparecer la *ruta completa* del directorio de descargas.
+Este reto consiste en listar los archivos, y solo los archivos, que se encuentran en el directorio descargas del usuario. Tienes que tener en cuenta que el directorio descargas puede ser diferente para cada usuario. Además, en la primera línea deberá aparecer la *ruta completa* del directorio de descargas.
 
 Además tiene que cumplir que únicamente sean archivos de imagen JPEG, en el caso de que tengan un número en el nombre del archivo se mostrarán en minúsculas y si en otro caso se mostrarán en mayúsculas. Y por último, al listarlos los pares llevarán una flecha precediendo.
 
