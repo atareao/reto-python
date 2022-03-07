@@ -1,22 +1,22 @@
-import os
+from os import *
 import re
 
 
 def get_download_folder():
-    home = os.path.expanduser("~")
-    return os.path.join(home, "Downloads")
+    home = path.expanduser("~")
+    return path.join(home, "Downloads")
 
 
 print(get_download_folder())
 
 patronJPG = re.compile(r"\.jp[e]?g", re.IGNORECASE)
 patronNum = re.compile(r"[0-9]", re.IGNORECASE)
-descargasDir = get_download_folder()
+dwnldDir = get_download_folder()
 
-contenido = os.listdir(descargasDir)
+contenido = listdir(dwnldDir)
 imagenes = []
 for fichero in contenido:
-    if os.path.isfile(os.path.join(descargasDir, fichero)) and patronJPG.search(fichero):
+    if path.isfile(path.join(dwnldDir, fichero)) and patronJPG.search(fichero):
         imagenes.append(fichero)
 
 pos = 0

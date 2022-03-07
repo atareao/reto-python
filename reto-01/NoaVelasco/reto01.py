@@ -1,9 +1,11 @@
 import os
 
+
 def get_download_folder():
-        home = os.path.expanduser("~")
-        return os.path.join(home, "Downloads")
-    
+    home = os.path.expanduser("~")
+    return os.path.join(home, "Downloads")
+
+
 print(get_download_folder()) 
 
 ejemplo_dir = get_download_folder()
