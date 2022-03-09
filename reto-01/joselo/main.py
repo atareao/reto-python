@@ -10,8 +10,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -22,7 +22,6 @@
 # SOFTWARE.
 
 
-import sys
 import os
 
 from xdg import Path
@@ -37,10 +36,9 @@ if __name__ == "__main__":
         with open(xdg_user_dirs, 'r') as f:
             # Vivamos peligrosamente... :D
             exec(f.read().replace("$HOME", os.environ["HOME"]))
-
-    except FileNotFoundError:
-        print(f"No se encuentra el fichero {xdg_user_dirs}")
-        sys.exit()
+    except Exception as exception:
+        msg = f"No se encuentra el fichero {xdg_user_dirs}"
+        raise RuntimeError(msg) from exception
 
     try:
         downloads_dir = Path(XDG_DOWNLOAD_DIR)
@@ -48,7 +46,6 @@ if __name__ == "__main__":
         for f in downloads_dir.iterdir():
             if f.is_file() and not f.is_symlink():
                 print(str(f))
-
-    except FileNotFoundError:
-        print(f"No existe el directorio {XDG_DOWNLOAD_DIR}")
-        sys.exit()
+    except Exception as exception:
+        msg = f"No existe el directorio {XDG_DOWNLOAD_DIR}"
+        raise RuntimeError(msg) from exception

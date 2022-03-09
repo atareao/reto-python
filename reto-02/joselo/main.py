@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 
-import sys
 import os
 import re
 
@@ -40,10 +39,9 @@ if __name__ == "__main__":
         with open(xdg_user_dirs, 'r') as f:
             # Seguimos viviendo peligrosamente... :/
             exec(f.read().replace("$HOME", os.environ["HOME"]))
-
-    except FileNotFoundError:
-        print(f"No se encuentra el fichero {xdg_user_dirs}")
-        sys.exit()
+    except Exception as exception:
+        msg = f"No se encuentra el fichero {xdg_user_dirs}"
+        raise RuntimeError(msg) from exception
 
     try:
         downloads_dir = Path(XDG_DOWNLOAD_DIR)
@@ -54,10 +52,9 @@ if __name__ == "__main__":
         jpegs = [x for x in files if pjpg.match(x)]
         for n, name in enumerate(jpegs):
             name = name.upper() if pnum.match(name) else name.lower()
-            prefix = " => " if n%2 == 0 else ' '
+            prefix = " => " if n % 2 == 0 else ' '
             name = str(n) + prefix + name
             print(name)
-
-    except FileNotFoundError:
-        print(f"No existe el directorio {XDG_DOWNLOAD_DIR}")
-        sys.exit()
+    except Exception as exception:
+        msg = f"No existe el directorio {XDG_DOWNLOAD_DIR}"
+        raise RuntimeError(msg) from exception
