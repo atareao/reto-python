@@ -45,7 +45,7 @@ if __name__ == "__main__":
         print(f"\nDirectorio: {XDG_DOWNLOAD_DIR}\n")
         for f in downloads_dir.iterdir():
             if f.is_file() and not f.is_symlink():
-                print(str(f))
+                print(f.name)
     except Exception as exception:
         msg = f"No existe el directorio {XDG_DOWNLOAD_DIR}"
         raise RuntimeError(msg) from exception
