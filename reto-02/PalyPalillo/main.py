@@ -1,4 +1,3 @@
-from distutils import extension
 import os
 from pathlib import Path
 
