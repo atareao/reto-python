@@ -39,7 +39,7 @@ def get_downloads_dir():
                     line = line.strip() \
                             .replace('"', '') \
                             .replace("$HOME", os.environ['HOME'])
-                    key, _ , XDG_DOWNLOAD_DIR = line.partition('=')
+                    key, _, XDG_DOWNLOAD_DIR = line.partition('=')
     except Exception as exception:
         msg = f"No se encuentra el fichero {USER_DIRS_FILE}"
         raise RuntimeError(msg) from exception
@@ -60,7 +60,5 @@ def main():
         raise RuntimeError(msg) from exception
 
 
-
 if __name__ == "__main__":
-
     main()
