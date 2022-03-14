@@ -19,10 +19,7 @@ def main():
     archivos_jpg = filter(buscar_imagenes, os.listdir(descargas))
 
     for idx, val in enumerate(map(check_numero, archivos_jpg)):
-        if idx % 2:
-            print(idx, val)
-        else:
-            print('{} => "{}"'.format(idx, val))
+        print(idx, val) if idx % 2 else print('{} => "{}"'.format(idx, val))
 
 if __name__ == '__main__':
 
