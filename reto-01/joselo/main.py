@@ -28,24 +28,39 @@ from xdg import Path
 from xdg.BaseDirectory import xdg_config_home
 
 
-if __name__ == "__main__":
+USER_DIRS_FILE = os.path.join(xdg_config_home, 'user-dirs.dirs')
 
-    xdg_user_dirs = Path(xdg_config_home) / "user-dirs.dirs"
 
+def get_downloads_dir():
     try:
-        with open(xdg_user_dirs, 'r') as f:
-            # Vivamos peligrosamente... :D
-            exec(f.read().replace("$HOME", os.environ["HOME"]))
+        with open(USER_DIRS_FILE, 'r') as f:
+            for line in f.readlines():
+                if line.startswith('XDG_DOWNLOAD_DIR'):
+                    line = line.strip() \
+                            .replace('"', '') \
+                            .replace("$HOME", os.environ['HOME'])
+                    key, _ , XDG_DOWNLOAD_DIR = line.partition('=')
     except Exception as exception:
-        msg = f"No se encuentra el fichero {xdg_user_dirs}"
+        msg = f"No se encuentra el fichero {USER_DIRS_FILE}"
         raise RuntimeError(msg) from exception
 
+    return XDG_DOWNLOAD_DIR
+
+
+def main():
+
     try:
-        downloads_dir = Path(XDG_DOWNLOAD_DIR)
-        print(f"\nDirectorio: {XDG_DOWNLOAD_DIR}\n")
+        downloads_dir = Path(get_downloads_dir())
+        print(f"\nDirectorio: {downloads_dir}\n", flush=True)
         for f in downloads_dir.iterdir():
             if f.is_file() and not f.is_symlink():
                 print(f.name)
     except Exception as exception:
         msg = f"No existe el directorio {XDG_DOWNLOAD_DIR}"
         raise RuntimeError(msg) from exception
+
+
+
+if __name__ == "__main__":
+
+    main()
