@@ -41,7 +41,8 @@ def files_in_download_dir():
 
 def main():
     jpegs = [file for file in files_in_download_dir() if
-             mimetypes.guess_type(os.path.join(get_download_dir(), file))[0] == 'image/jpeg']
+             mimetypes.guess_type(os.path.join(get_download_dir(),
+                                               file))[0] == 'image/jpeg']
     print(f'\nDirectorio: {get_download_dir()}\n')
     for i, jpeg in enumerate(jpegs):
         jpeg = jpeg.lower() if re.findall('[0-9]+', jpeg) else jpeg.upper()
