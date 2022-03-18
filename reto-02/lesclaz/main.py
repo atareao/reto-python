@@ -12,27 +12,42 @@
 #  #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-import sys
-import os
 import configparser
+import mimetypes
+import os
+import re
+import sys
 
 from xdg.BaseDirectory import xdg_config_home
 
-if __name__ == "__main__":
+
+def get_download_dir():
     config = configparser.ConfigParser()
     try:
         with open(os.path.join(xdg_config_home, "user-dirs.dirs")) as f:
             config.read_string(f'[XDG_USER_DIR]\n{f.read()}'
                                .replace('$HOME', os.path.expanduser("~"))
                                .replace('"', ''))
-        download_dir = config["XDG_USER_DIR"]["XDG_DOWNLOAD_DIR"]
-
-        print(f'\nDirectorio: {download_dir}\n')
-        for file in [file for file in os.listdir(download_dir)
-                     if os.path.isfile(os.path.join(download_dir, file))]:
-            print(file)
-
+        return config["XDG_USER_DIR"]["XDG_DOWNLOAD_DIR"]
     except FileNotFoundError:
         print("Este Usuario no tiene directorio de descargas")
         sys.exit()
+
+
+def files_in_download_dir():
+    return [file for file in os.listdir(get_download_dir()) if
+            os.path.isfile(os.path.join(get_download_dir(), file))]
+
+
+def main():
+    jpegs = [file for file in files_in_download_dir() if
+             mimetypes.guess_type(os.path.join(get_download_dir(),
+                                               file))[0] == 'image/jpeg']
+    print(f'\nDirectorio: {get_download_dir()}\n')
+    for i, jpeg in enumerate(jpegs):
+        jpeg = jpeg.lower() if re.findall('[0-9]+', jpeg) else jpeg.upper()
+        print(f'{i} => {jpeg}' if i % 2 == 0 else f'{i} {jpeg}')
+
+
+if __name__ == '__main__':
+    main()
