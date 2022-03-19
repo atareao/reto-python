@@ -24,13 +24,11 @@ def main():
         configuracion = open(conf_completo).readline()
         directorio = configuracion[configuracion.index("=") +1 :].strip().replace('"','')
 
-
         if not os.path.exists(directorio):
             raise Exception(f'No existe el directorio {directorio}')
 
-        archivos_jpg = filter(buscar_imagenes, os.listdir(directorio))
-
-        for idx, val in enumerate(map(check_numero, archivos_jpg)):
+        for idx, val in enumerate(map(check_numero, filter(buscar_imagenes,
+                                                           os.listdir(directorio)))):
             print(idx, val) if idx % 2 else print('{} => "{}"'.format(idx, val))
 
     except Exception as exception:
