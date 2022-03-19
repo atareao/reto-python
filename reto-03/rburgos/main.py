@@ -1,4 +1,4 @@
-"""Reto 02 Python Atareao"""
+"""Reto 03 Python Atareao"""
 import os
 
 def buscar_imagenes(archivo):
