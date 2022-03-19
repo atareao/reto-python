@@ -1,5 +1,4 @@
-# El usuario define el directorio que quira usar para listar
-# Guardar el directorio en un archivo de conf
+"""Reto 02 Python Atareao"""
 import os
 
 def buscar_imagenes(archivo):
@@ -11,7 +10,8 @@ def check_numero(string):
     return string.lower() if any(map(str.isdigit, string)) else string.upper()
 
 def main():
-    conf_path = "/home/roberto/.config/diogenes/"
+    """Listar imágenes desde un archivo de configuracion"""
+    conf_path = os.path.expanduser('~') + '/.config/diogenes/'
     conf_file = "diogenes.conf"
     conf_completo = conf_path + conf_file
 
@@ -21,16 +21,16 @@ def main():
             with open(conf_completo, 'w') as f:
                 descargas = os.popen("xdg-user-dir DOWNLOAD").read().strip()
                 f.write(f'directorio = "{descargas}"')
+
         configuracion = open(conf_completo).readline()
-        directorio = configuracion[configuracion.index("=") +1 :].strip().replace('"','')
+        directorio = configuracion[configuracion.index("=") +1 :].strip().replace('"', '')
 
         if not os.path.exists(directorio):
             raise Exception(f'No existe el directorio {directorio}')
 
         for idx, val in enumerate(map(check_numero, filter(buscar_imagenes,
                                                            os.listdir(directorio)))):
-            print(idx, val) if idx % 2 else print('{} => "{}"'.format(idx, val))
-
+            print(idx, val) if idx % 2 else print(f'{idx} => "{val}"')
     except Exception as exception:
         print(exception)
 
