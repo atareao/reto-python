@@ -31,15 +31,16 @@ import os.path as osp
 import toml
 import mimetypes
 
+from pathlib import Path
 from xdg.BaseDirectory import xdg_config_home
 from easyansi import screen  # pip install --user easyansi
 from easyansi.drawing import box
 from easyansi.cursor import locate
 from easyansi.attributes import (
-    normal,
-    dim,
-    italic,
-    italic_off,
+    normal_code,
+    dim_code,
+    italic_code,
+    italic_off_code,
     underline_code,
     underline_off_code
     )
@@ -57,8 +58,8 @@ PRESENTACION = """\
  actual, Diogenes solo lista los ficheros de tipo "image/jpeg" del directorio que se
  encuentra en el fichero de configuración "~/.config/diogenes/diogenes.conf".
 
- Ese directorio es por defecto el directorio estándar de descargas del usuario pero
- puede ser cambiado a voluntad del usuario editando el fichero de configuración o
+ Ese directorio es, por defecto, el directorio estándar de descargas del usuario pero
+ puede ser cambiado a voluntad por el usuario editando el fichero de configuración o
  bien introduciendo una ruta válida en el menú que se ofrece a continuación.
 """
 
@@ -69,6 +70,21 @@ def get_user_dirs():
     return ud
 
 
+def presentacion():
+    lineas = [x.strip() for x in PRESENTACION.strip().split('\n')]
+    box_width = 4 + max(len(x) for x in lineas)
+    box_height = 2 + len(lineas)
+    screen.clear()
+    box(box_width, box_height, style="d")
+    print(f"{dim_code()}{italic_code()}", end='', flush=True)
+    # dim(); italic()
+    for fila, linea in enumerate(lineas):
+        locate(2, fila + 1)
+        print(linea)
+    print(f"{normal_code()}{italic_off_code()}", end='', flush=True)
+    # normal(); italic_off()
+
+
 def read_dgns_dir():
 
     try:
@@ -76,36 +92,40 @@ def read_dgns_dir():
     except (FileNotFoundError, KeyError):
         dgdir = get_user_dirs()['XDG_DOWNLOAD_DIR']
 
-    lineas = PRESENTACION.split('\n')
-    box_width = 4 + max(len(x) for x in lineas)
-    box_height = 1 + len(lineas)
-
     while True:
-        screen.clear()
-        box(box_width, box_height, style="d")
-        dim()
-        italic()
-        for fila, linea in enumerate(lineas):
-            locate(1, fila + 1)
-            print(linea)
-        normal()
-        italic_off()
-        print()
-        print("El directorio de trabajo actual es: "
-              f"{underline_code()}{dgdir}{underline_off_code()}")
-        print(
-            "Si quieres conservar ese directorio pulsa ENTER, en caso contrario "
-            "introduce una ruta\nválida para el nuevo directorio: ")
-        respuesta = input(" >> ")
+        presentacion()
+        info = f"""
+
+  El directorio de trabajo actual es: {underline_code()}{dgdir}{underline_off_code()}
+
+  Si quieres conservar ese directorio pulsa ENTER, en caso contrario introduce una
+  ruta válida para el nuevo directorio:
+"""
+        print(info)
+        respuesta = input("\t>> ")
         if not respuesta:
             break
         respuesta = osp.normpath(osp.expanduser(respuesta))
         if osp.isdir(respuesta):
-            dgns_dir = respuesta
+            dgdir = respuesta
+            break
+        if osp.exists(respuesta):
+            print(f"""
+  La ruta {respuesta} existe pero no es un directorio válido, inténtalo de nuevo.""")
+            continue
         else:
-            print(f"{respuesta} no es un directorio válido.")
+            yesno = \
+                input("\n\tEsa ruta no existe ¿Quieres crear ese directorio? (y/N) ")
+            if yesno.lower() in ('', 'n', 'no'):
+                continue
+            os.makedirs(respuesta, mode=0o755, exist_ok=False)
+            dgdir = respuesta
+            break
 
-    pass
+    with open(DGNS_CONF_FILE, 'w') as dcf:
+        toml.dump({'directorio': dgdir}, dcf)
+
+    return dgdir
 
 
 def main():
@@ -113,7 +133,8 @@ def main():
     dgns_dir = read_dgns_dir()
     screen.clear()
     print(f"Directorio {dgns_dir}\n")
-    for file in os.listdir(dgns_dir):
+    # for file in os.listdir(dgns_dir):  # -> Esto es una lista
+    for file in Path(dgns_dir).iterdir():  # -> Esto es un iterador
         if mimetypes.guess_type(file)[0] == "image/jpeg":
             print(file)
 
