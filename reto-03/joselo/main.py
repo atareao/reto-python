@@ -33,7 +33,16 @@ import mimetypes
 
 from xdg.BaseDirectory import xdg_config_home
 from easyansi import screen  # pip install --user easyansi
-
+from easyansi.drawing import box
+from easyansi.cursor import locate
+from easyansi.attributes import (
+    normal,
+    dim,
+    italic,
+    italic_off,
+    underline_code,
+    underline_off_code
+    )
 
 mimetypes.init()
 
@@ -42,23 +51,68 @@ XDG_USER_DIRS = osp.join(xdg_config_home, 'user-dirs.dirs')
 DGNS_CONF_DIR = osp.join(xdg_config_home, 'diogenes')
 DGNS_CONF_FILE = osp.join(DGNS_CONF_DIR, 'diogenes.conf')
 
+PRESENTACION = """\
+ Diogenes es una aplicación pensada para la limpieza y organización semi automática
+ de los directorios donde realizamos las descargas. En el estadio de desarrollo
+ actual, Diogenes solo lista los ficheros de tipo "image/jpeg" del directorio que se
+ encuentra en el fichero de configuración "~/.config/diogenes/diogenes.conf".
+
+ Ese directorio es por defecto el directorio estándar de descargas del usuario pero
+ puede ser cambiado a voluntad del usuario editando el fichero de configuración o
+ bien introduciendo una ruta válida en el menú que se ofrece a continuación.
+"""
+
 
 def get_user_dirs():
-    def f(x): return x.replace("$HOME", osp.expanduser('~'))
     ud = toml.load(XDG_USER_DIRS)
-    ud = {k: f(ud[k]) for k in ud.keys()}
+    ud = {k: osp.expandvars(ud[k]) for k in ud.keys()}
     return ud
 
 
-def input_dgns_dir():
+def read_dgns_dir():
+
+    try:
+        dgdir = toml.load(DGNS_CONF_FILE)['directorio']
+    except (FileNotFoundError, KeyError):
+        dgdir = get_user_dirs()['XDG_DOWNLOAD_DIR']
+
+    lineas = PRESENTACION.split('\n')
+    box_width = 4 + max(len(x) for x in lineas)
+    box_height = 1 + len(lineas)
+
+    while True:
+        screen.clear()
+        box(box_width, box_height, style="d")
+        dim()
+        italic()
+        for fila, linea in enumerate(lineas):
+            locate(1, fila + 1)
+            print(linea)
+        normal()
+        italic_off()
+        print()
+        print("El directorio de trabajo actual es: "
+              f"{underline_code()}{dgdir}{underline_off_code()}")
+        print(
+            "Si quieres conservar ese directorio pulsa ENTER, en caso contrario "
+            "introduce una ruta\nválida para el nuevo directorio: ")
+        respuesta = input(" >> ")
+        if not respuesta:
+            break
+        respuesta = osp.normpath(osp.expanduser(respuesta))
+        if osp.isdir(respuesta):
+            dgns_dir = respuesta
+        else:
+            print(f"{respuesta} no es un directorio válido.")
+
     pass
 
 
 def main():
-    os.makedirs(DGNS_CONF_DIR, mode=0o755, exists_ok=True)
-    dgns_dir = input_dgns_dir()
+    os.makedirs(DGNS_CONF_DIR, mode=0o755, exist_ok=True)
+    dgns_dir = read_dgns_dir()
     screen.clear()
-    print(f"\n{dgns_dir}\n{len(dgns_dir) * '='}\n")
+    print(f"Directorio {dgns_dir}\n")
     for file in os.listdir(dgns_dir):
         if mimetypes.guess_type(file)[0] == "image/jpeg":
             print(file)
