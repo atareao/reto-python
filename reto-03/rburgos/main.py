@@ -11,9 +11,8 @@ def check_numero(string):
 
 def main():
     """Listar imágenes desde un archivo de configuracion"""
-    conf_path = os.path.expanduser('~') + '/.config/diogenes/'
-    conf_file = "diogenes.conf"
-    conf_completo = conf_path + conf_file
+    conf_path = os.path.expanduser('~/.config/diogenes/')
+    conf_completo = os.path.join(conf_path, "diogenes.conf")
 
     try:
         if not os.path.exists(conf_completo):
@@ -23,7 +22,7 @@ def main():
                 f.write(f'directorio = "{descargas}"')
 
         configuracion = open(conf_completo).readline()
-        directorio = configuracion[configuracion.index("=") +1 :].strip().replace('"', '')
+        directorio = configuracion.split("=")[1].strip().replace('"', '')
 
         if not os.path.exists(directorio):
             raise Exception(f'No existe el directorio {directorio}')
