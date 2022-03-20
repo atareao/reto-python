@@ -4,7 +4,7 @@
 __license__ = """
 MIT License
 
-Copyright (c) 2022 JLNC.
+Copyright (c) 2022 José Lorenzo Nieto Corral <a.k.a. JLNC> <a.k.a. JoseLo>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -45,6 +45,7 @@ from easyansi.attributes import (
     underline_off_code
     )
 
+
 mimetypes.init()
 
 
@@ -52,7 +53,7 @@ XDG_USER_DIRS = osp.join(xdg_config_home, 'user-dirs.dirs')
 DGNS_CONF_DIR = osp.join(xdg_config_home, 'diogenes')
 DGNS_CONF_FILE = osp.join(DGNS_CONF_DIR, 'diogenes.conf')
 
-PRESENTACION = """\
+DESCRIPCION = """\
  Diogenes es una aplicación pensada para la limpieza y organización semi automática
  de los directorios donde realizamos las descargas. En el estadio de desarrollo
  actual, Diogenes solo lista los ficheros de tipo "image/jpeg" del directorio que se
@@ -60,8 +61,20 @@ PRESENTACION = """\
 
  Ese directorio es, por defecto, el directorio estándar de descargas del usuario pero
  puede ser cambiado a voluntad por el usuario editando el fichero de configuración o
- bien introduciendo una ruta válida en el menú que se ofrece a continuación.
+ bien introduciendo el nombre y *solo el nombre* del directorio en el prompt que se
+ ofrece a continuación.
 """
+
+
+def ruta_valida(ruta):
+    # Tiene que haber una forma mejor de hacer esto...
+    home = osp.expanduser('~')
+    if ruta.startswith(osp.sep):
+        ruta = ruta.replace(osp.sep, '')
+    ruta = osp.expanduser(osp.expandvars(ruta))
+    if not ruta.startswith(home):
+        ruta = osp.join(home, ruta)
+    return osp.normpath(ruta)
 
 
 def get_user_dirs():
@@ -70,8 +83,8 @@ def get_user_dirs():
     return ud
 
 
-def presentacion():
-    lineas = [x.strip() for x in PRESENTACION.strip().split('\n')]
+def descripcion():
+    lineas = [x.strip() for x in DESCRIPCION.strip().split('\n')]
     box_width = 4 + max(len(x) for x in lineas)
     box_height = 2 + len(lineas)
     screen.clear()
@@ -93,19 +106,21 @@ def read_dgns_dir():
         dgdir = get_user_dirs()['XDG_DOWNLOAD_DIR']
 
     while True:
-        presentacion()
+        descripcion()
         info = f"""
 
   El directorio de trabajo actual es: {underline_code()}{dgdir}{underline_off_code()}
 
   Si quieres conservar ese directorio pulsa ENTER, en caso contrario introduce una
-  ruta válida para el nuevo directorio:
+  ruta válida para el nuevo directorio.
+
+  La ruta tendrá como raíz tu directorio de usuario aunque no empiece con '~/':\n
 """
         print(info)
-        respuesta = input("\t>> ")
+        respuesta = input("\t>>> ")
         if not respuesta:
             break
-        respuesta = osp.normpath(osp.expanduser(respuesta))
+        respuesta = ruta_valida(respuesta)
         if osp.isdir(respuesta):
             dgdir = respuesta
             break
@@ -133,10 +148,10 @@ def main():
     dgns_dir = read_dgns_dir()
     screen.clear()
     print(f"Directorio {dgns_dir}\n")
-    # for file in os.listdir(dgns_dir):  # -> Esto es una lista
-    for file in Path(dgns_dir).iterdir():  # -> Esto es un iterador
+    # for file in os.listdir(dgns_dir):  # Esto es una lista
+    for file in Path(dgns_dir).iterdir():  # Esto es un iterador
         if mimetypes.guess_type(file)[0] == "image/jpeg":
-            print(file)
+            print(osp.basename(file))
 
 
 if __name__ == "__main__":
