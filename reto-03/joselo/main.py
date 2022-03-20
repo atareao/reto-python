@@ -28,17 +28,18 @@ SOFTWARE.
 
 import os
 import os.path as osp
-import toml
 import mimetypes
+import toml
+import easyansi.cursor as cursor
 
 from pathlib import Path
 from xdg.BaseDirectory import xdg_config_home
-from easyansi import screen  # pip install --user easyansi
+from easyansi import screen
 from easyansi.drawing import box
-from easyansi.cursor import locate
 from easyansi.attributes import (
     normal_code,
     dim_code,
+    bright_code,
     italic_code,
     italic_off_code,
     underline_code,
@@ -54,25 +55,31 @@ DGNS_CONF_DIR = osp.join(xdg_config_home, 'diogenes')
 DGNS_CONF_FILE = osp.join(DGNS_CONF_DIR, 'diogenes.conf')
 
 DESCRIPCION = """\
- Diogenes es una aplicación pensada para la limpieza y organización semi automática
- de los directorios donde realizamos las descargas. En el estadio de desarrollo
- actual, Diogenes solo lista los ficheros de tipo "image/jpeg" del directorio que se
- encuentra en el fichero de configuración "~/.config/diogenes/diogenes.conf".
+ Diogenes es una aplicación pensada para la limpieza y organización semi
+ automática de los directorios donde realizamos las descargas.
 
- Ese directorio es, por defecto, el directorio estándar de descargas del usuario pero
- puede ser cambiado a voluntad por el usuario editando el fichero de configuración o
- bien introduciendo el nombre y *solo el nombre* del directorio en el prompt que se
- ofrece a continuación.
+ En el estadio de desarrollo actual, Diogenes solo lista los ficheros de
+ tipo "image/jpeg" del directorio que se encuentra en el fichero de
+ configuración "~/.config/diogenes/diogenes.conf".
+
+ Ese directorio es, por defecto, el directorio estándar de descargas del
+ usuario pero puede ser cambiado a voluntad por el usuario editando el
+ fichero de configuración o bien introduciendo una ruta al directorio en
+ el prompt que se ofrece a continuación.
+"""
+
+AVISO = """\
+ ESTE SCRIPT ESTÁ PENSADO PARA SER USADO EN LOS DIRECTORIOS DE LOS
+ USUARIOS NORMALES CUYA INSTALACIÓN SIGA LOS ESTÁNDARES DE FREEDESKTOP.
 """
 
 
 def ruta_valida(ruta):
     # Tiene que haber una forma mejor de hacer esto...
     home = osp.expanduser('~')
-    if ruta.startswith(osp.sep):
-        ruta = ruta.replace(osp.sep, '')
     ruta = osp.expanduser(osp.expandvars(ruta))
-    if not ruta.startswith(home):
+    if not ruta.startswith(home) and ruta.startswith(osp.sep):
+        ruta = ruta.replace(osp.sep, '')
         ruta = osp.join(home, ruta)
     return osp.normpath(ruta)
 
@@ -87,15 +94,28 @@ def descripcion():
     lineas = [x.strip() for x in DESCRIPCION.strip().split('\n')]
     box_width = 4 + max(len(x) for x in lineas)
     box_height = 2 + len(lineas)
-    screen.clear()
+    col_, fil_ = cursor.get_location()
+    cursor.locate(0, fil_)
     box(box_width, box_height, style="d")
     print(f"{dim_code()}{italic_code()}", end='', flush=True)
-    # dim(); italic()
     for fila, linea in enumerate(lineas):
-        locate(2, fila + 1)
+        cursor.locate(2, fila + fil_ + 1)
         print(linea)
-    print(f"{normal_code()}{italic_off_code()}", end='', flush=True)
-    # normal(); italic_off()
+    print(f"{normal_code()}{italic_off_code()}", end='\n', flush=True)
+
+
+def aviso():
+    lineas = [x.strip() for x in AVISO.strip().split('\n')]
+    box_width = 4 + max(len(x) for x in lineas)
+    box_height = 2 + len(lineas)
+    col_, fil_ = cursor.get_location()
+    cursor.locate(0, fil_)
+    box(box_width, box_height, style="d")
+    print(f"{bright_code()}", end='', flush=True)
+    for fila, linea in enumerate(lineas):
+        cursor.locate(2, fila + fil_ + 1)
+        print(linea)
+    print(f"{normal_code()}", end='\n', flush=True)
 
 
 def read_dgns_dir():
@@ -103,18 +123,23 @@ def read_dgns_dir():
     try:
         dgdir = toml.load(DGNS_CONF_FILE)['directorio']
     except (FileNotFoundError, KeyError):
+        dgdir = ''
+
+    if not osp.exists(dgdir):
         dgdir = get_user_dirs()['XDG_DOWNLOAD_DIR']
 
     while True:
+        screen.clear()
+        aviso()
         descripcion()
-        info = f"""
+        info = "\n  El directorio de trabajo actual es: "
+        info += f"""{underline_code()}{dgdir}{underline_off_code()}
 
-  El directorio de trabajo actual es: {underline_code()}{dgdir}{underline_off_code()}
+  Si quieres conservar ese directorio pulsa ENTER, en caso contrario
+  introduce una ruta válida para el nuevo directorio.
 
-  Si quieres conservar ese directorio pulsa ENTER, en caso contrario introduce una
-  ruta válida para el nuevo directorio.
-
-  La ruta tendrá como raíz tu directorio de usuario aunque no empiece con '~/':\n
+  La ruta tendrá como raíz tu directorio de usuario aunque no empiece
+  con '$HOME/', '/home/user/', o '~/':
 """
         print(info)
         respuesta = input("\t>>> ")
@@ -126,11 +151,11 @@ def read_dgns_dir():
             break
         if osp.exists(respuesta):
             print(f"""
-  La ruta {respuesta} existe pero no es un directorio válido, inténtalo de nuevo.""")
+  La ruta {respuesta} existe pero no es un directorio, inténtalo de nuevo.""")
             continue
         else:
-            yesno = \
-                input("\n\tEsa ruta no existe ¿Quieres crear ese directorio? (y/N) ")
+            yesno = input("\n\tEsa ruta no existe "
+                          "¿Quieres crear ese directorio? (y/N) ")
             if yesno.lower() in ('', 'n', 'no'):
                 continue
             os.makedirs(respuesta, mode=0o755, exist_ok=False)
@@ -148,8 +173,8 @@ def main():
     dgns_dir = read_dgns_dir()
     screen.clear()
     print(f"Directorio {dgns_dir}\n")
-    # for file in os.listdir(dgns_dir):  # Esto es una lista
-    for file in Path(dgns_dir).iterdir():  # Esto es un iterador
+    # for file in os.listdir(dgns_dir):    # Esto es una lista y ocupa memoria.
+    for file in Path(dgns_dir).iterdir():  # Esto es un iterador.
         if mimetypes.guess_type(file)[0] == "image/jpeg":
             print(osp.basename(file))
 
