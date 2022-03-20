@@ -26,23 +26,21 @@ def main():
     with open(rutaDiogenes, "r") as f:
             dwnldDir = f.readline()
             
-    # No he sido capaz de obtener el resultado de un re.compile/re.search 
-    # como string para usarlo como directorio. He tenido que hacer reemplazos,
-    # lo que es poco eficiente y elegante, pero aún no sé manejar el módulo re.
-    
-    reemplazo1 = re.sub(r"""[ ="]""", "", dwnldDir)
-    reemplazo2 = re.sub(r"""\n""", "", reemplazo1)
-    reemplazo3 = re.sub(r"""directorio""", "", reemplazo2) 
+    # Aisla el directorio con expresiones regulares:
 
-    print(f"Imágenes JPG en el directorio '{reemplazo3}': \n-----------------------------")
-    
+    patron = re.compile(r'"(\S+)"')
+    reemplazo3 = re.findall(patron, dwnldDir)
+
+    print(
+        f"Imágenes JPG en el directorio {reemplazo3[0]}: \n-----------------------------")
+
     # Si los archivos del directorio son JPG, mostrarlos uno a uno:
-    
-    listArchivos = listdir(reemplazo3)
+
+    listArchivos = listdir(reemplazo3[0])
     for fichero in listArchivos:
         if mimetypes.guess_type(fichero)[0] == "image/jpeg":
             print(fichero)
-        
+
  
 if __name__ == "__main__":
     main()
