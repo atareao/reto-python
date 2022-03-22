@@ -5,27 +5,29 @@
 
 import mimetypes  # Para los JPG
 from os import listdir, path  # Para manejar rutas
-import re  # Para buscar o reemplazar 
+import re  # Para buscar o reemplazar
 
 # No tengo la menor idea de qué es lo de TOML y no sé
 # si hay que implementar algo o cómo hacerlo.
 
+
 def main():
-    
+
     rutaDiogenes = path.join(path.expanduser(
-        "~"), '.config\diogenes\diogenes.conf')
+        "~"), '.config\\diogenes\\diogenes.conf')
 
     # ¿Existe el archivo config? Si no, se crea:
-    
-    if path.isfile(rutaDiogenes)==False:
+    # No es buen condicional según PEP8, pero no sé cómo hacerlo si no.
+
+    if path.isfile(rutaDiogenes) == False:
         with open(rutaDiogenes, "w") as f:
             f.write('directorio = "/Users/noave/Downloads"')
 
     # Se lee el archivo:
-    
+
     with open(rutaDiogenes, "r") as f:
-            dwnldDir = f.readline()
-            
+        dwnldDir = f.readline()
+
     # Aisla el directorio con expresiones regulares:
 
     patron = re.compile(r'"(\S+)"')
@@ -41,6 +43,6 @@ def main():
         if mimetypes.guess_type(fichero)[0] == "image/jpeg":
             print(fichero)
 
- 
+
 if __name__ == "__main__":
     main()
