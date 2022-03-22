@@ -1,4 +1,4 @@
-'''RETO PYTHON (ATAREAO) - EJERCICIO 1'''
+'''RETO PYTHON (ATAREAO) - EJERCICIO 2'''
 
 import os
 from os.path import exists

@@ -29,10 +29,10 @@ if __name__ == "__main__":
         download_dir = config["XDG_USER_DIR"]["XDG_DOWNLOAD_DIR"]
 
         print(f'\nDirectorio: {download_dir}\n')
-        for file in [file for file in os.listdir(download_dir) if os.path.isfile(os.path.join(download_dir, file))]:
+        for file in [file for file in os.listdir(download_dir)
+                     if os.path.isfile(os.path.join(download_dir, file))]:
             print(file)
 
     except FileNotFoundError:
         print("Este Usuario no tiene directorio de descargas")
         sys.exit()
-
