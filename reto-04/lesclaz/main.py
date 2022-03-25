@@ -20,7 +20,6 @@ from configurator import Configurator
 
 
 def main(app, config):
-    print(xdg_config_home)
     path = os.path.join(xdg_config_home, app)
     configurator = Configurator(path, config)
     data = configurator.read()

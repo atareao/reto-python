@@ -24,14 +24,22 @@ class Configurator:
     def __init__(self, path, config):
         self.path = path
         self.config_file = os.path.join(path, config)
-        self.validate()
+        self.__verify_config_file()
 
-    def validate(self):
+    def __verify_config_file(self):
+        """
+        Verifica si existe el archivo pasado como parámetro al crear la
+        instancia de la clase, y de no ser así, lo crea.
+        __ oculta la función impidiendo su acceso de forma sencilla.
+        """
         os.makedirs(self.path, exist_ok=True)
         if not os.path.exists(self.config_file):
             with open(self.config_file, "w") as fp:
                 fp.write(toml.dumps({"directorio": get_downloads_dir()}))
 
     def read(self):
+        """
+        Lee el archivo de configuración y devuelve su contenido.
+        """
         with open(self.config_file) as f:
             return toml.load(f)
