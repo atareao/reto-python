@@ -30,7 +30,7 @@ mimetypes.init()
 
 
 def list_images(path):
-    print(f"Directorio {path}")
+    print(f"Directorio {path}\n")
     for file in Path(path).iterdir():
         if mimetypes.guess_type(file)[0] == "image/jpeg":
             print(file.name)

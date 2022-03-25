@@ -22,14 +22,13 @@
 # SOFTWARE.
 
 
-import sys
 import os
 import toml
 
 from xdg import xdg_config_home
 
 
-class Configurator(object):
+class Configurator:
 
     def __init__(self, path, config):
         self._config_dir = path
