@@ -29,10 +29,12 @@ def find_users_dirs():
                     item_list[1].replace("$HOME", HOME).replace('"', "")
 
 
+
 def check_toml():
     '''
     FUNCIÓN QUE COMPRUEBA EXISTENCIA FICHERO TOML
     - SI NO EXISTE EL DIRECTORIO LO CREA
+
     - SI NO EXISTE EL FICHERO LO CREA Y LO RELLENA CON EL DIRECTORIO DE USUARIO
     - SI EXISTE CARGA LAS ASIGNACIONES A UN DICCIONARIO
     '''
@@ -40,6 +42,7 @@ def check_toml():
     if not exists(TOML_DIR):
         os.mkdir(TOML_DIR)
         print(f"Creado el directorio {TOML_DIR}")
+
     if not exists(TOML_FILE):
         find_users_dirs()
         TOML_DICT["directorio"] = USER_DIRS_DICT["XDG_DOWNLOAD_DIR"]
@@ -66,6 +69,6 @@ def main():
     check_toml()
     list_dir(TOML_DICT["directorio"], "image/jpeg")
 
-
 if __name__ == '__main__':
     main()
+
