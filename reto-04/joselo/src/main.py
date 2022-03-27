@@ -33,7 +33,6 @@ def main(app, config):
     data = configurator.read()
     list_images(Path(data['directorio']))
 
-
 if __name__ == '__main__':
     APP = "diogenes"
     config = f"{APP}.conf"

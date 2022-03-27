@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 # Copyright (c) 2022 José Lorenzo Nieto Corral <a.k.a. jlnc> <a.k.a. JoseLo>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,7 +27,11 @@ from pathlib import Path
 mimetypes.init()
 
 
-def list_images(path):
+def list_images(path: Path) -> None:
+    """Listar los ficheros con mimetype "image/jpeg" de un directorio.
+
+    :param: path: la ruta al directorio que queremos listar.
+    """
     print(f"Directorio {path}\n")
     for file in Path(path).iterdir():
         if mimetypes.guess_type(file)[0] == "image/jpeg":
