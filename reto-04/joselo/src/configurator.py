@@ -64,7 +64,8 @@ class Configurator:
             os.makedirs(self._config_dir, exist_ok=True)
 
     def _set_config_file(self, config: str) -> None:
-        """Crear el fichero de configuración y definir el directorio de descargas.
+        """\
+        Crear el fichero de configuración y definir el directorio de descargas.
 
         Hay que asegurar que el nombre del fichero dado en el argumento es un
         mombre de fichero válido. Los caráteres no válidos para el nombre de un
