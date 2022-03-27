@@ -29,6 +29,7 @@ from xdg import XDG_CONFIG_HOME
 class Configurator:
     """Clase Configurator: crear y manejar la configuración de Diogenes.
     """
+
     def __init__(self, path: Path, config: str) -> None:
         """Constructor.
 
@@ -83,6 +84,7 @@ class Configurator:
             directorio = ''
 
         if not os.path.exists(directorio):
+
             try:
                 xdg_config_file: Path = XDG_CONFIG_HOME / "user-dirs.dirs"
                 user_dirs = toml.load(xdg_config_file)
@@ -93,16 +95,13 @@ class Configurator:
 No existe el fichero {0} que define los directorios de usuario del Cross
 Desktop Group (XDG) de freedesktop.org y no es posible continuar.
 """.format(xdg_config_file)
-
                 raise RuntimeError(msg) from exception
 
             except KeyError as exception:
-
                 msg = f"""\
 No se ha podido encontrar una entrada que defina el directorio estándar
 de descargas en el fichero de configuración {0} y no es posible
 continuar.""".format(xdg_config_file)
-
                 raise RuntimeError(msg) from exception
 
         with open(self._config_file, 'w', encoding='utf-8') as file_write:
