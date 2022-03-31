@@ -27,11 +27,22 @@ from configurator import Configurator
 from utils import list_images
 
 
+def step1(path, config):
+    Configurator(path, config)
+
+
+def step2(path, config):
+    conf = Configurator(path, config).read()
+    for dir in conf['directorios'].values():
+        print('==', dir['in'], '==')
+        for image in list_images(Path(dir['in'])):
+            print(image.name)
+
+
 def main(app, config):
     path = Path(xdg_config_home()) / app
-    configurator = Configurator(path, config)
-    data = configurator.read()
-    list_images(Path(data['directorio']))
+    step1(path, config)
+    step2(path, config)
 
 
 if __name__ == '__main__':
