@@ -23,7 +23,7 @@
 import os
 from pathlib import Path
 import toml
-from xdg import XDG_CONFIG_HOME
+# from xdg import XDG_CONFIG_HOME
 
 
 class Configurator:
@@ -36,91 +36,27 @@ class Configurator:
         :param path: La ruta al directorio de la configuración.
         :param config: El nombre del fichero de configuración.
         """
-        self._set_config_dir(path)
-        self._set_config_file(config)
+        self.directory = path
+        self.filename = config
+        self.check()
 
-    def _set_config_dir(self, path: Path) -> None:
-        """Crear el directorio de la aplicación.
-
-        Asegurarnos de que al constructor no se le pasan rutas extrañas, de
-        que el path del directorio de la aplicación está donde debe estar y
-        de que ese directorio existe.
-        """
-        def ruta_valida(ruta: Path) -> Path:
-            home = Path().home()
-            # No existen equivalentes a expandvars o normpath en pathlib.
-            ruta = os.path.expandvars(ruta)
-            ruta = Path(os.path.normpath(ruta))
-            ruta = ruta.expanduser()
-            if ruta.is_relative_to(home):
-                return ruta
-            if ruta.is_absolute():
-                ruta = ruta.relative_to(ruta.anchor)
-            ruta = home.joinpath(ruta)
-            return ruta
-
-        self._config_dir = ruta_valida(path)
-        if not self._config_dir.exists():
-            os.makedirs(self._config_dir)
-
-    def _set_config_file(self, config: str) -> None:
-        """\
-        Crear el fichero de configuración y definir el directorio de descargas.
-
-        Hay que asegurar que el nombre del fichero dado en el argumento es un
-        mombre de fichero válido. Los caráteres no válidos para el nombre de un
-        fichero son: '\\/:*?"<>|', al espacio en blanco le damos un tratamiento
-        diferente: no se acepta ni al principio ni al final del nombre y se
-        reemplaza por '_' cuando está en el interior del nombre.
-        """
-
-        fname = config.strip().replace(' ', '_')
-        if any(c in fname for c in '\\/:*?"<>|'):
-            raise ValueError
-        self._config_file = self._config_dir / fname
-
-        try:
-            directorio = toml.load(self._config_file)["directorio"]
-        except (FileNotFoundError, KeyError):
-            directorio = ''
-
-        # Path('').exists() -> True
-        # os.path.exists('') -> False
-        if not os.path.exists(directorio):
-        # Los valores por defecto.
-            try:
-                xdg_config_file: Path = XDG_CONFIG_HOME / "user-dirs.dirs"
-                user_dirs = toml.load(xdg_config_file)
-                directorio = os.path.expandvars(user_dirs["XDG_DOWNLOAD_DIR"])
-
-            except FileNotFoundError as exception:
-                msg = f"""\
-No existe el fichero {0} que define los directorios de usuario del Cross
-Desktop Group (XDG) de freedesktop.org y no es posible continuar.
-""".format(xdg_config_file)
-                raise RuntimeError(msg) from exception
-
-            except KeyError as exception:
-                msg = f"""\
-No se ha podido encontrar una entrada que defina el directorio estándar
-de descargas en el fichero de configuración {0} y no es posible
-continuar.""".format(xdg_config_file)
-                raise RuntimeError(msg) from exception
-
-        with open(self._config_file, 'w', encoding='utf-8') as file_write:
-            data = dict()
-            data["directorio"] = directorio
-            toml.dump(data, file_write)
+    def check(self):
+        if not self.directory.exists():
+            os.makedirs(self.directory)
+        config_file = self.directory / self.filename
+        if not config_file.exists():
+            config_file.write_text('["directorios"]\n')
+        conf = toml.load(config_file)
+        for dirs in conf['directorios'].values():
+            for path in [Path(d) for d in dirs.values()]:
+                if not path.exists():
+                    os.makedirs(path)
 
     def read(self):
-        return toml.load(self._config_file)
+        config_file = self.directory / self.filename
+        return toml.load(config_file)
 
-    @property
-    def conf_dir(self):
-        return self._config_dir
-
-    @property
-    def config_file(self):
-        return self._config_file
-
-    
+    def save(self, conf):
+        config_file = self.directory / self.filename
+        with open(config_file, 'w') as fw:
+            toml.dump(conf, fw)

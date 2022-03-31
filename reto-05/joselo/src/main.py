@@ -34,7 +34,7 @@ def step1(path, config):
 def step2(path, config):
     conf = Configurator(path, config).read()
     for dir in conf['directorios'].values():
-        print('==', dir['in'], '==')
+        print('== ', dir['in'], ' ==')
         for image in list_images(Path(dir['in'])):
             print(image.name)
 

@@ -30,9 +30,7 @@ mimetypes.init()
 def list_images(path: Path) -> None:
     """Listar los ficheros con mimetype "image/jpeg" de un directorio.
 
-    :param: path: la ruta al directorio que queremos listar.
+    :param path: la ruta al directorio que queremos listar.
     """
-    print(f"Directorio {path}\n")
-    for file in Path(path).iterdir():
-        if mimetypes.guess_type(file)[0] == "image/jpeg":
-            print(file.name)
+    return [f for f in Path(path).iterdir()
+            if mimetypes.guess_type(f)[0] == "image/jpeg"]
