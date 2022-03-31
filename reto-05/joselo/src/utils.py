@@ -27,7 +27,7 @@ from pathlib import Path
 mimetypes.init()
 
 
-def list_images(path: Path) -> None:
+def list_images(path: Path) -> list:
     """Listar los ficheros con mimetype "image/jpeg" de un directorio.
 
     :param path: la ruta al directorio que queremos listar.
