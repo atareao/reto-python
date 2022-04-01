@@ -1,6 +1,7 @@
 import os
 import mimetypes
 
+
 def list_images(directory):
     """
     Comprueba que existe un directorio dado
