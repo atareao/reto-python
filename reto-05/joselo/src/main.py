@@ -24,7 +24,7 @@
 from pathlib import Path
 from xdg import xdg_config_home
 from configurator import Configurator
-from utils import list_images
+from utils import list_images, decora
 
 
 def step1(path, config):
@@ -34,7 +34,7 @@ def step1(path, config):
 def step2(path, config):
     conf = Configurator(path, config).read()
     for dir in conf['directorios'].values():
-        print('\n== ', dir['in'], ' ==\n')
+        decora(dir['in'])
         for image in list_images(Path(dir['in'])):
             print(image.name)
 
