@@ -23,24 +23,49 @@
 import os
 from pathlib import Path
 import toml
-# from xdg import XDG_CONFIG_HOME
 
 
 class Configurator:
-    """Clase Configurator: crear y manejar la configuración de Diogenes.
+    """Crear y manejar la configuración de la aplicación.
     """
 
     def __init__(self, path: Path, config: str) -> None:
         """Constructor.
 
-        :param path: La ruta al directorio de la configuración.
-        :param config: El nombre del fichero de configuración.
+        Almacena los parametros de entada y chequea la configuración.
+
+        Parameters
+        ----------
+        path : Path
+            El path al directorio de la configuración.
+        config : str
+            El nombre del fichero de configuración.
+
+        Returns
+        -------
+        None
+
         """
         self.directory = path
         self.filename = config
         self.check()
 
     def check(self):
+        """Chequea la integridad de la configuración.
+
+        1) Si no existe el directorio de la configuración, lo crea.
+
+        2) Si no existe el fichero de configuración, lo crea y escribe
+           el nombre de la sección principal: '["directorios"]'.
+
+        3) Si existe el fichero de configuración, lo lee y crea todos
+           los directorios definidos en él.
+
+        Returns
+        -------
+        None.
+
+        """
         if not self.directory.exists():
             os.makedirs(self.directory)
         config_file = self.directory / self.filename

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2022 Lorenzo Carbonell <a.k.a. atareao>
+# Copyright (c) 2022 José Lorenzo Nieto Corral <a.k.a. jlnc> <a.k.a JoseLo>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -27,22 +27,46 @@ from configurator import Configurator
 from utils import list_images, decora
 
 
-def step1(path, config):
-    Configurator(path, config)
-
-
-def step2(path, config):
-    conf = Configurator(path, config).read()
-    for dir in conf['directorios'].values():
-        decora(dir['in'])
-        for image in list_images(Path(dir['in'])):
-            print(image.name)
-
+# =====================================================================
+# Los dos bloques de código, el comentado con step1, step2 y main, y
+# el main sin comentar son igualmente válidos y ambos funcionan, pero
+# yo prefiero el segundo.
+# =====================================================================
+# def step1(path, config):
+#     Configurator(path, config)
+#
+#
+# def step2(path, config):
+#     conf = Configurator(path, config).read()
+#     for dir in conf['directorios'].values():
+#         decora(dir['in'])
+#         for image in list_images(Path(dir['in']),
+#                                  mime_types=("image/jpeg",
+#                                              "image/png"),
+#                                  only_print=False):
+#             print(image.name)
+#
+#
+# def main(app, config):
+#     path = Path(xdg_config_home()) / app
+#     step1(path, config)
+#     step2(path, config)
+#
+# =====================================================================
 
 def main(app, config):
     path = Path(xdg_config_home()) / app
-    step1(path, config)
-    step2(path, config)
+    # Cuando se llama al constructor de Configurator, se ejecuta el
+    # método "check" y solo cuando se ha construido el objeto, se
+    # ejecuta el método "read" con el chequeo ya hecho.
+    conf = Configurator(path, config).read()
+    for dir in conf['directorios'].values():
+        decora(dir['in'])
+        # Llamamos a list_mimetypes usando su otro nombre: list_images.
+        for image in list_images(Path(dir['in']),
+                                 mime_types=("image/jpeg", "image/png"),
+                                 only_print=False):
+            print(image.name)
 
 
 if __name__ == '__main__':

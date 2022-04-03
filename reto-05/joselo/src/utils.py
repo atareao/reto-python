@@ -22,36 +22,53 @@
 
 import mimetypes
 from pathlib import Path
+from typing import NoReturn, Union
 
 
 mimetypes.init()
 
 
-def list_images_dir(path: Path) -> list:
-    """Listar los ficheros con mimetype "image/jpeg" de un directorio.
+# ¿Son correctas las anotaciones de tipo?
+def list_mimetypes(path: Path,
+                   mime_types: tuple[str, ...] = ("image/jpeg",),
+                   only_print: bool = True) -> Union[filter, NoReturn]:
+    """\
+    Listar los ficheros con mimetypes en "mime_types" de "path".
 
-    :param path: la ruta al directorio que queremos listar.
-    :return: lista con los nombres de los ficheros tipo "image/jpeg".
+    Parameters
+    ----------
+    path : Path
+        El directorio que se quiere listar.
+    mime_types : tuple[str, ...], optional
+        Los mimetypes que se listarán. Por defecto es ("image/jpeg",).
+    only_print : bool, optional
+        Si es True la salida se envía a la salida estándar, en caso
+        contrario retorna un objeto filter. The default is True.
+
+    Returns
+    -------
+    NoReturn o filter
+
     """
-    return [f for f in Path(path).iterdir()
-            if mimetypes.guess_type(f)[0] == "image/jpeg"]
+    if only_print:
+        print(f"Directorio {path}\n")
+        for file in Path(path).iterdir():
+            if mimetypes.guess_type(file)[0] in mime_types:
+                print(file.name)
+    else:
+        # Una "inner function"
+        def mimefilter(f):
+            return mimetypes.guess_type(f)[0] in mime_types
+        return filter(mimefilter, Path(path).iterdir())
 
 
-def iter_images_dir(path: Path):
-    """Listar los ficheros con mimetype "image/jpeg" de un directorio.
-
-    Versión iterador.
-
-    :param path: la ruta al directorio que queremos listar.
-    :return: iterador con los nombres de los ficheros tipo "image/jpeg".
-    """
-    def mimefilter(f): return mimetypes.guess_type(f)[0] == "image/jpeg"
-    return filter(mimefilter, Path(path).iterdir())
+# Las funciones en Python son objetos de "primera clase" y se pueden
+# asignar a otra variable. Ahora "list_images" y "list_mimetypes" son
+# dos nombres (etiquetas) que hacen referencia al mismo objeto.
+list_images = list_mimetypes
 
 
-list_images = iter_images_dir
-
-
+# Esto es por puro divertimento.
 def decora(linea):
     deco = '≡' * (5 + len(linea))
     print('\n', deco)
