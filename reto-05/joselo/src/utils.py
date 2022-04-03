@@ -22,16 +22,16 @@
 
 import mimetypes
 from pathlib import Path
-from typing import NoReturn, Union
+from typing import Union
 
 
 mimetypes.init()
 
 
-# ¿Son correctas las anotaciones de tipo?
+# ¿Son correctas estas anotaciones de tipo?
 def list_mimetypes(path: Path,
                    mime_types: tuple[str, ...] = ("image/jpeg",),
-                   only_print: bool = True) -> Union[filter, NoReturn]:
+                   only_print: bool = True) -> Union[filter, None]:
     """\
     Listar los ficheros con mimetypes en "mime_types" de "path".
 
@@ -47,7 +47,7 @@ def list_mimetypes(path: Path,
 
     Returns
     -------
-    NoReturn o filter
+    None o filter
 
     """
     if only_print:
