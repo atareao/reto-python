@@ -62,7 +62,7 @@ def list_mimetypes(path: Path,
         return filter(mimefilter, Path(path).iterdir())
 
 
-# Las funciones en Python son objetos de "primera clase" y se pueden
+# Las funciones en Python son "ciudadanos de primera clase" y se pueden
 # asignar a otra variable. Ahora "list_images" y "list_mimetypes" son
 # dos nombres (etiquetas) que hacen referencia al mismo objeto.
 list_images = list_mimetypes
