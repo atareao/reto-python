@@ -14,7 +14,7 @@ class Configurator:
         if not self.config_file.exists():
             idata = {}
             idata["directorio"] = "/home/rburgos/Descargas"
-            with open(config_file, 'w') as file_writer:
+            with open(self.config_file, 'w') as file_writer:
                 toml.dump(idata, file_writer)
 
     def read(self):
