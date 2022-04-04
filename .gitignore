@@ -160,11 +160,5 @@ lib64
 pyvenv.cfg
 */share/
 *.whl
-.
-..
-.git
+*home/
 .gitignore
-*.vscode/
-reto-05/joselo/src/home/
-reto-05/joselo/src/no-utiles.py
-reto-05/joselo/src/reto-05.toml
