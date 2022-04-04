@@ -23,6 +23,8 @@
 import os
 from pathlib import Path
 import toml
+# ¡Gracias @fpellicer!
+from typing import Dict, Union, MutableMapping, Any
 
 
 class Configurator:
@@ -50,7 +52,7 @@ class Configurator:
         self.filename = config
         self.check()
 
-    def check(self):
+    def check(self) -> None:
         """Chequea la integridad de la configuración.
 
         1) Si no existe el directorio de la configuración, lo crea.
@@ -77,11 +79,11 @@ class Configurator:
                 if not path.exists():
                     os.makedirs(path)
 
-    def read(self):
+    def read(self) -> MutableMapping[str, Any]:
         config_file = self.directory / self.filename
         return toml.load(config_file)
 
-    def save(self, conf):
+    def save(self, conf: Union[Dict, MutableMapping[str, Any]]) -> None:
         config_file = self.directory / self.filename
         with open(config_file, 'w') as fw:
             toml.dump(conf, fw)

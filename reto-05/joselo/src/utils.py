@@ -28,7 +28,7 @@ from typing import Union
 mimetypes.init()
 
 
-# ¿Son correctas estas anotaciones de tipo?
+# ¿Son correctas estas anotaciones de tipo (filter)?
 def list_mimetypes(path: Path,
                    mime_types: tuple[str, ...] = ("image/jpeg",),
                    only_print: bool = True) -> Union[filter, None]:
