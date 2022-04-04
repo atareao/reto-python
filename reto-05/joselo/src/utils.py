@@ -40,7 +40,7 @@ def list_mimetypes(path: Path,
                    mime_types: tuple[str, ...] = ("image/jpeg",),
                    only_print: bool = True) -> Union[filter, None]:
     """\
-    Listar los ficheros con mimetypes en "mime_types" de "path".
+    Listar los ficheros de "path" cuyo mime type esté en "mime_types".
 
     Parameters
     ----------
