@@ -28,7 +28,14 @@ from typing import Union
 mimetypes.init()
 
 
-# ¿Son correctas estas anotaciones de tipo (filter)?
+# La función 'list_mimetypes', cuando se llama con los keywords por
+# defecto, produce el mismo resultado que la función 'list_images'
+# usada en el reto-04: es backward compatible o compatible hacía
+# atrás. La mejora consiste en que ahora podemos pedirle que filtre
+# otros mime types a voluntad y pedirle que devuelva un objeto de
+# tipo 'filter' en lugar de producir meros efectos laterales.
+
+# DUDA: ¿Son correctas estas anotaciones de tipo (filter)?
 def list_mimetypes(path: Path,
                    mime_types: tuple[str, ...] = ("image/jpeg",),
                    only_print: bool = True) -> Union[filter, None]:
