@@ -86,10 +86,34 @@ class Configurator:
                     os.makedirs(path)
 
     def read(self) -> MutableMapping[str, Any]:
+        """Leer la configuración.
+
+        Accede al fichero de configuración usando los atributos que
+        se definen en el constructor (self.path y self.filename)
+
+        Returns
+        -------
+        MutableMapping[str, Any]
+
+        """
         config_file = self.directory / self.filename
         return toml.load(config_file)
 
     def save(self, conf: Union[Dict, MutableMapping[str, Any]]) -> None:
+        """Guarda la configuración en el formato TOML.
+
+        Parameters
+        ----------
+        conf : Union[Dict, MutableMapping[str, Any]]
+            La variable que hemos usado para definir la configuración
+            de forma interna.
+
+        Returns
+        -------
+        None
+            DESCRIPTION.
+
+        """
         config_file = self.directory / self.filename
         with open(config_file, 'w') as fw:
             toml.dump(conf, fw)

@@ -20,6 +20,7 @@
 # SOFTWARE.
 
 
+import os
 import mimetypes
 from pathlib import Path
 from typing import Union
@@ -81,3 +82,37 @@ def decora(linea):
     print('\n', deco)
     print(' ⭆', linea, '⭅')
     print(f" {deco}\n")
+
+
+# Una vieja conocida que no utilizo en esta ocasión.
+def ruta_valida(ruta: Path) -> Path:
+    """Forzar que un path ('ruta') cumpla ciertos requisitos:
+
+    1) Tiene que ser un path absoluto.
+    2) Tiene que comenzar con /home/_USUARIO_
+    3) Las variables de shell se sustituyen por su valor.
+    4) El path se "normaliza": se sustituyen cosas como
+       "/dir1/dir2/./dir3/../../dir4" por "/dir1/dir4".
+
+    Parameters
+    ----------
+    ruta : Path
+        El path que tenemos que procesar.
+
+    Returns
+    -------
+    Path
+        El path corregido.
+
+    """
+    home = Path().home()
+    # No existen equivalentes a expandvars o normpath en pathlib.
+    ruta = os.path.expandvars(ruta)
+    ruta = Path(os.path.normpath(ruta))
+    ruta = ruta.expanduser()
+    if ruta.is_relative_to(home):
+        return ruta
+    if ruta.is_absolute():
+        ruta = ruta.relative_to(ruta.anchor)
+    ruta = home.joinpath(ruta)
+    return ruta
