@@ -11,22 +11,8 @@
 #  GNU General Public License for more details.
 #  #
 #  You should have received a copy of the GNU General Public License
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import os.path
-from pathlib import Path
-from xdg import xdg_config_home
-from utils import list_images
-from configurator import Configurator
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-def main(app, config):
-    path = Path(xdg_config_home(), app)
-    configurator = Configurator(path, config)
-    data = configurator.read()
-    list_images(Path(data['directorio']))
-
-
-if __name__ == '__main__':
-    APP = "diogenes"
-    config = f"{APP}.conf"
-    main(APP, config)
+APP_NAME = "Diogenes"
+CONFIG_PATH = f"~/.config/{APP_NAME}"
+CONFIG_FILE = f"{APP_NAME}.conf"
