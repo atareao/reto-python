@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 #############################################################################
-#                                                                           #
+# Reto 05; intento hacer el main lo más exacto al original sugerido por el  #
+# reto de atareao                                                           #
 #############################################################################
 
 # Copyright (c) 2022 Jon Iñaki INCHAURBE ZARATE (joinzar@gmail.com)

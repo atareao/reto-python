@@ -1,0 +1,50 @@
+Según la web:
+    vamos a dar un paso mas y permitir que el usuario defina tantos directorios como quiera.
+
+    Para hacer esto, es necesario modificar nuestro archivo de configuración para dotarle de mas posibilidades. No solo vamos a definir un directorio de entrada sino que además tienes que definir un directorio de salida. La forma de guardar toda esta información es mediante un diccionario en Python. Toda la información se guarda en parejas clave valor. Aunque esto no quiere decir, que como valor puedas tener un array.
+
+    Así el archivo de configuración pasará a ser de la siguiente forma
+
+    [directorios]
+
+    [directorios.1]
+    in = "/home/lorenzo/ImágenesIn1"
+    out = "/home/lorenzo/ImágenesOut1"
+
+    [directorios.2]
+    in = "/home/lorenzo/ImágenesIn2"
+    out = "/home/lorenzo/ImágenesOut2"
+
+    Igual que hiciste en el reto anterior, en caso de que no exista el directorio y el archivo de configuración, tienes que crearlos. El archivo de configuración tendrá el siguiente aspecto,
+
+    [directorios]
+
+    En el caso de que exista el archivo de configuración y tenga diferentes directorios, tendrás que comprobar que existen y en caso de que no existan tienes que crearlos.
+
+Pero en el vídeo dice o se lee:
+    ...
+    Igual que hiciste en el reto anterior, en caso de que no exista el directorio y el archivo de configuración, tienes que crearlos. **Sin embargo, a diferencia del anterior, no definirás ningún directorio.** El archivo de configuración tendrá el siguiente aspecto,
+
+    [directorios]
+    ...
+
+Habrá que hacer la prueba con un fichero de configuración y establecer un aviso de que no hay... 
+Voy a partir del reto 04 de atareao
+
+El main.py de atareao va a ser como el que creo.
+
+se me ocurre: Se puede sacar los diccionarios de dentro con algo como ir sacando lonchas iterando sobre las keys internas.
+Supongo que será un 
+
+with toml.load(dfdfd) as contenido:
+    for key in contenido.keys():
+        valores1 = contenido{'key1']
+            for key in valores1.keys()
+            
+Función listar imágenes:
+    Si metemos en main listar ficheros, si no los hay, no puede iterar nada.
+    Como la función es listar... lo mejor es meter una condición para ver si hay ficheros y si los hay, listar.
+        
+
+
+

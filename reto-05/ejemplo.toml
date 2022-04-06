@@ -1,0 +1,9 @@
+[Directorios]
+
+[Directorios.1]
+in = "/home/jon/Diogenes1"
+out = "/home/jon/Diogenes1/salida/"
+
+#[Directorios.2]
+#in = "/home/jon/Diogenes2"
+#out = "/home/jon/Diogenes2/salida/"
