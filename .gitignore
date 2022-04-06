@@ -160,3 +160,5 @@ lib64
 pyvenv.cfg
 */share/
 *.whl
+*home/
+.gitignore
