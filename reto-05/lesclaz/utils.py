@@ -21,10 +21,11 @@ import toml
 from xdg import xdg_config_home
 
 
-def get_downloads_dir():
+def get_downloads_dir() -> str:
     """
     Localiza y devuelve la ruta hacia la carpeta de descargas del usuario
     que ejecuta la app.
+    :return: ruta al directorio de descargas del usuario.
     """
     path_to_user_dirs = Path(xdg_config_home() / "user-dirs.dirs")
     if os.path.exists(path_to_user_dirs):
@@ -35,12 +36,12 @@ def get_downloads_dir():
                                 .replace("$HOME/", ""))
 
 
-def list_images(dir_to_list):
+def list_images(dir_to_list: str) -> list:
     """
     Lista los archivos de imagen JPEG dentro del directorio pasado como
     parámetro.
-
-    return:
+    :param dir_to_list: ruta hacia el directorio a listar.
+    :return: lista de imágenes en el directorio.
     """
     return [file for file in os.listdir(dir_to_list)
             if os.path.isfile(

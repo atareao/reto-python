@@ -12,19 +12,21 @@
 #  #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import configparser
 import mimetypes
 import os
 import re
 import sys
+from pathlib import Path
 
-from xdg.BaseDirectory import xdg_config_home
+from xdg import xdg_config_home
 
 
 def get_download_dir():
     config = configparser.ConfigParser()
     try:
-        with open(os.path.join(xdg_config_home, "user-dirs.dirs")) as f:
+        with open(Path(xdg_config_home() / "user-dirs.dirs")) as f:
             config.read_string(f'[XDG_USER_DIR]\n{f.read()}'
                                .replace('$HOME', os.path.expanduser("~"))
                                .replace('"', ''))
