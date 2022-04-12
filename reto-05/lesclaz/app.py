@@ -14,5 +14,5 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 APP_NAME = "Diogenes"
-CONFIG_PATH = f"~/.config/{APP_NAME}"
-CONFIG_FILE = f"{APP_NAME}.conf"
+CONFIG_PATH = f"~/.config/{APP_NAME.lower()}"
+CONFIG_FILE = f"{APP_NAME.lower()}.conf"

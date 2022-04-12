@@ -12,16 +12,18 @@
 #  #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import os.path
+
 from pathlib import Path
+
 from xdg import xdg_config_home
-from utils import list_images
+
 from configurator import Configurator
+from utils import list_images
 
 
-def main(app, config):
-    path = Path(xdg_config_home(), app)
-    configurator = Configurator(path, config)
+def main(app, conf):
+    path = Path(xdg_config_home() / app)
+    configurator = Configurator(path, conf)
     data = configurator.read()
     list_images(Path(data['directorio']))
 
