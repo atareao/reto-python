@@ -12,11 +12,13 @@
 #  #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import mimetypes
 import os
+from pathlib import Path
 
 import toml
-from xdg.BaseDirectory import xdg_config_home
+from xdg import xdg_config_home
 
 
 def get_downloads_dir():
@@ -24,7 +26,7 @@ def get_downloads_dir():
     Localiza y devuelve la ruta hacia la carpeta de descargas del usuario
     que ejecuta la app.
     """
-    path_to_user_dirs = os.path.join(xdg_config_home, "user-dirs.dirs")
+    path_to_user_dirs = Path(xdg_config_home() / "user-dirs.dirs")
     if os.path.exists(path_to_user_dirs):
         with open(path_to_user_dirs) as conf_dirs:
             user_dirs = toml.load(conf_dirs)

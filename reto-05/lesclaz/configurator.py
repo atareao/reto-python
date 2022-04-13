@@ -14,6 +14,8 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+from pathlib import Path
+from typing import MutableMapping, Any, Mapping
 
 import toml
 
@@ -22,42 +24,49 @@ from utils import get_downloads_dir
 
 class Configurator:
 
-    def __init__(self, path, config):
+    def __init__(self, path: str, config: str):
+        """
+        Interfaz que permite crear, leer o guardar un archivo de configuración.
+        :param path: ruta hacia el directorio que alojara el archivo de
+        configuración.
+        :param config: nombre del archivo de configuración.
+        """
         self.path = path
-        self.config_file = os.path.join(path, config)
-        self.directories = None
+        self.config_file = Path(path, config)
+
+        # verificar si existe el archivo de configuración.
         self.__verify_config_file()
+
+        # crear directorios que no existan.
         self.__create_dirs()
 
-    def __create_dirs(self):
+    def __create_dirs(self) -> None:
         """
-        Crea los Directorios del archivo de configuracion que no esxixtan.
+        Crea los Directorios del archivo de configuración que no existan.
         __ oculta la función impidiendo su acceso de forma sencilla.
         """
-        if "Directorios" in self.read():
-            dirs = self.read()["Directorios"]
+        if "directorios" in self.read():
+            dirs = self.read()["directorios"]
             try:
                 for dir_ in dirs:
                     os.makedirs(dirs[dir_]["in"], exist_ok=True)
                     os.makedirs(dirs[dir_]["out"], exist_ok=True)
             except KeyError:
                 raise Exception(
-                    "El archivo de configuracion esta mal escrito."
+                    "El archivo de configuración está mal formateado."
                 )
 
-    def __verify_config_file(self):
+    def __verify_config_file(self) -> None:
         """
         Verifica si existe el archivo pasado como parámetro al crear la
         instancia de la clase, y de no ser así, lo crea.
         __ oculta la función impidiendo su acceso de forma sencilla.
-
-        return:
         """
         os.makedirs(self.path, exist_ok=True)
         if not os.path.exists(self.config_file):
             with open(self.config_file, "w") as fp:
                 fp.write(toml.dumps({
-                    "Directorios": {
+                    "directorios": {
                         "1": {
                             "in": get_downloads_dir(),
                             "out": get_downloads_dir()
@@ -65,18 +74,19 @@ class Configurator:
                     }
                 }))
 
-    def read(self):
+    def read(self) -> MutableMapping[str, Any]:
         """
         Lee el archivo de configuración y devuelve su contenido.
-
-        return:
+        :return: contenido del archivo de configuración.
         """
         with open(self.config_file) as f:
             return toml.load(f)
 
-    def save(self, config: str or dict):
+    def save(self, config: Mapping[str, Any]) -> None:
         """
-        Guarda la configuracion en el archivo.
+        Guarda la configuración en el archivo.
+        :param config: Mapping[str, Any] con la estructura del archivo de
+        configuración o str resultante de toml.dumps().
         """
         with open(self.config_file, "w") as file:
-            file.write(config if type(config) == str else toml.dumps(config))
+            file.write(toml.dumps(config))
