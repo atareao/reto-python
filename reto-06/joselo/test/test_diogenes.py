@@ -30,8 +30,8 @@ import toml
 import unittest
 
 sys.path.append(os.path.join("../src"))
-from configurator import Configurator
-from utils import action
+from configurator import Configurator  # noqa: E402
+from utils import action               # noqa: E402
 
 
 CONFIG_FILE = "diogenes.toml"
