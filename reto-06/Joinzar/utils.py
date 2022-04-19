@@ -112,9 +112,11 @@ def copy_files(directory_in, directory_out):
             if afile not in ficheros_out:
                 shutil.copy(directory_in + '/' + afile, directory_out)
             else:
-                print(f"{afile} ya existe, no se copiará")
+                # print(f"{afile} ya existe, no se copiará")
+                pass
     else:
-        print(f"{directory_in} no existe. Nada para copiar")
+        # print(f"{directory_in} no existe. Nada para copiar")
+        pass
 
 
 def move_files(directory_in, directory_out):
@@ -133,7 +135,6 @@ def move_files(directory_in, directory_out):
     Meto un mensaje de confirmación (verbose)
 
     """
-    print(f'voy a mover desde {directory_in} a {directory_out}')  # prueba
     if os.path.exists(directory_in):
         if not os.path.exists(directory_out):
             os.makedirs(directory_out)
@@ -143,9 +144,8 @@ def move_files(directory_in, directory_out):
             if afile not in ficheros_out:
                 shutil.move(directory_in + '/' + afile, directory_out)
             else:
-                print(f"{afile} ya existe, se borrará")
                 os.remove(directory_out + '/' + afile)
-                # shutil.move(directory_in + '/' + afile, directory_out)
+                shutil.move(directory_in + '/' + afile, directory_out)
     else:
-        print(f"{directory_in} no existe. Nada para copiar")
-    pass
+        # print(f"{directory_in} no existe. Nada para copiar")
+        pass
