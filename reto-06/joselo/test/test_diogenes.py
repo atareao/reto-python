@@ -29,9 +29,9 @@ import sys
 import toml
 import unittest
 
-sys.path.append(os.path.join("../src"))
-from configurator import Configurator  # noqa: E402
-from utils import action               # noqa: E402
+sys.path.append(os.path.join("../src"))  # noqa
+from configurator import Configurator
+from utils import action
 
 
 CONFIG_FILE = "diogenes.toml"
@@ -76,7 +76,7 @@ class DiogenesTest(unittest.TestCase):
         with open(CONFIG_FILE, 'w') as file_writer:
             toml.dump(CONFIG, file_writer)
         # --- 👇 --- aquí va tu código --- 👇 ---
-        configurator = Configurator(Path('.').absolute(), CONFIG_FILE)
+        configurator = Configurator(TEST_ROOT, CONFIG_FILE)
         config = configurator.read()
         # --- 👆 --- aquí va tu código --- 👆 ---
         for n in (1, 2, 3):
