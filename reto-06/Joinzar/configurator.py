@@ -52,12 +52,41 @@ import toml
 
 
 class Configurator:
+    """ Clase Configurator de Diogenes app
+
+    Establece acciones y atributos para la configuración de la app
+    Diogenes.
+
+    Atributos:
+    path: Directorio de archivos de configuración, que se pasen como
+    argumento.
+    filename: nombre del archivo que se pase como argumento.
+
+    """
+
     def __init__(self, path, filename):
+        """ Constructor de Configurator
+
+        Establece atributos:
+        path: Directorio de archivos de configuración, que se pasen como
+        argumento.
+        filename: nombre del archivo que se pase como argumento.
+
+        Ejecuta también función check()
+
+        """
         self.path = path
         self.filename = filename
         self.check()
 
     def check(self):
+        """ Módulo check de la clase Configurator
+
+        Comprueba que exista el directorio de configuración. Si no existe
+        lo crea y también el fichero de configuración, pero vacío, sin
+        valores.
+
+        """
         if not self.path.exists():
             os.makedirs(self.path)
         config_file = self.path / self.filename
@@ -67,10 +96,22 @@ class Configurator:
                 toml.dump(idata, file_writer)
 
     def read(self):
+        """ Módulo read de Configurator.
+
+        Lee el fichero de configuración (formato toml) y devuelve el
+        contenido en forma de diccionario
+
+        """
         config_file = self.path / self.filename
         return toml.load(config_file)
 
     def save(self, conf):
+        """ Módulo save de Configurator
+
+        Vuelca en el archivo de configuración (formato toml) el
+        contenido pasado por argumento.
+
+        """
         config_file = self.path / self.filename
         with open(config_file, 'w') as file_writer:
             toml.dump(conf, file_writer)

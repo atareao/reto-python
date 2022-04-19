@@ -47,29 +47,105 @@
 # DE CONTRATO, AGRAVIO O CUALQUIER OTRO MOTIVO, DERIVADAS DE, FUERA DE O EN
 # CONEXIÓN CON EL SOFTWARE O SU USO U OTRO TIPO DE ACCIONES EN EL SOFTWARE.
 
+#############################################################################
+# Se comentan los mensajes ya que parece que por ahora no se quiere imprimir#
+# bien se dejan para una fase posterior, quizás haciéndolo multilingüe      #
+#############################################################################
+
 import os
 import mimetypes
+import shutil
 
 mimetypes.init()
 
 
 def list_images(directory):
-    """
+    """ Función listar imágenes de un directorio dado (argumento)
+
     La función es listar imágenes de un directorio dado.
     Si el directorio no existe, se debe crear.
     Pero se debe revisar si está vacío antes de listar o iterar porque si no,
     no lista nada y es mosqueante
+
     """
     if not directory.exists():
         os.makedirs(directory)
+        # print(f"Se ha creado el directorio {directory}")
     if len(os.listdir(directory)) == 0:
-        print('El directorio está vacío')
+        # print('El directorio está vacío')
+        pass
     else:
         contador = 0
+        images = ('image/jpeg', 'image/png', 'image/svg+xml',
+                  'image/tiff')
         for afile in directory.iterdir():
-            if not afile.is_dir() and \
-            mimetypes.guess_type(afile)[0] == 'image/jpeg':
+            if (afile.is_file() and
+                    mimetypes.guess_type(afile)[0] in images):
                 print(afile.name)
                 contador += 1
         if contador == 0:
-            print('No hay imágenes para listar')
+            # print('No hay imágenes para listar')
+            pass
+
+
+def copy_files(directory_in, directory_out):
+    """ Función copiar archivos desde directory_in a directory_out
+
+    Asumo que la función es copiar todos los archivos que existan en el
+    directorio_in al out y que el escenario es que existan sólo archivos,
+    ya que si existieran directorios, el escenario cambia.
+
+    Se comprueba que los directorios existan. Si in no existe, imprime
+    aviso y cesa. Si out no existe, se crea.
+
+    Para cada archivo, debe comprobar que no exista un archivo con el
+    mismo nombre en out y si no existe, copiarlo.
+    Meto un mensaje de confirmación (verbose)
+
+    """
+    if os.path.exists(directory_in):
+        if not os.path.exists(directory_out):
+            os.makedirs(directory_out)
+        ficheros_in = os.listdir(directory_in)
+        ficheros_out = os.listdir(directory_out)
+        for afile in ficheros_in:
+            if afile not in ficheros_out:
+                shutil.copy(directory_in + '/' + afile, directory_out)
+            else:
+                print(f"{afile} ya existe, no se copiará")
+    else:
+        print(f"{directory_in} no existe. Nada para copiar")
+
+
+def move_files(directory_in, directory_out):
+    """ Función mover archivos desde directory_in a directory_out
+
+    Asumo que la función es mover todos los archivos que existan en el
+    directorio_in al out y que el escenario es que existan sólo archivos,
+    ya que si existieran directorios, el escenario cambia.
+
+    Se comprueba que los directorios existan. Si in no existe, levantaría
+    error y cesa. Si out no existe, se crea.
+
+    Según instrucciones, se deben mover los archivos de in a out,
+    pero si existen en destino, se deben borrar antes. ¿Cuáles?
+    Entiendo que para cada archivo.
+    Meto un mensaje de confirmación (verbose)
+
+    """
+    print(f'voy a mover desde {directory_in} a {directory_out}')  # prueba
+    if os.path.exists(directory_in):
+        if not os.path.exists(directory_out):
+            os.makedirs(directory_out)
+        ficheros_in = os.listdir(directory_in)
+        ficheros_out = os.listdir(directory_out)
+        for afile in ficheros_in:
+            if afile not in ficheros_out:
+                shutil.move(directory_in + '/' + afile, directory_out)
+            else:
+                print(f"{afile} ya existe, se borrará")
+                os.remove(directory_out + '/' + afile)
+                # shutil.move(directory_in + '/' + afile, directory_out)
+    else:
+        print(f"{directory_in} no existe. Nada para copiar")
+    pass

@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#############################################################################
-# Reto 05; intento hacer el main lo más exacto al original sugerido por el  #
-# reto de atareao                                                           #
-#############################################################################
-
 # Copyright (c) 2022 Jon Iñaki INCHAURBE ZARATE (joinzar@gmail.com)
 #
 # [Official text in English]
@@ -47,34 +42,55 @@
 # DE CONTRATO, AGRAVIO O CUALQUIER OTRO MOTIVO, DERIVADAS DE, FUERA DE O EN
 # CONEXIÓN CON EL SOFTWARE O SU USO U OTRO TIPO DE ACCIONES EN EL SOFTWARE
 
+#############################################################################
+# Se comentan los mensajes ya que parece que por ahora no se quiere imprimir#
+# o bien se dejan para una fase posterior, quizás haciéndolo multilingüe    #
+#############################################################################
+
 from pathlib import Path
 from xdg import xdg_config_home
 from configurator import Configurator
-from utils import list_images
+import utils
 
 
 def step1(path, config):
+    """ Función step1
+
+    ¿Crea una instancia? de la clase Configurator
+
+    """
     Configurator(path, config)
 
 
 def step2(path, config):
+    """ Función step2
+
+    Lee el contenido del archivo de configuración usando módulo read
+    de la clase Configurator y da el valor a la variable conf.
+    Como primer paso, compruebo que el archivo tenga contenido (al
+    menos algún directorio) y si es así, muestra mensaje y no ejecuta
+    nada.
+    En otro caso, imprime el directorio in y según su configuración,
+    hará nada, copiar o mover.
+
+    """
     conf = Configurator(path, config).read()
-    # Controlar que exista contenido, pues crea archivo nuevo vacío
+    # Controlar que exista contenido
     if len(conf['Directorios']) == 0:
-        print(f"El archivo {config} está vacío. Por favor, incluya ",
-        "algún valor válido")
+        # print(
+        # f"El archivo {config} está vacío. Por favor, incluya ",
+        # "algún valor válido")
+        pass
     else:
-    # Bloque original del ejercicio
         for dir in conf['Directorios'].values():
             print('=====', dir['in'], '=====')
-            # El siguiente bucle sólo tiene sentido si existen ficheros
-            # Si no, no se puede iterar
-            # TypeError: 'NoneType' object is not iterable
-            # Dejo ese "trabajo" a utils
-            # En el original:
-#            for image in list_images(Path(dir['in'])):
-#                print(image.name)
-            list_images(Path(dir['in']))
+            if dir['action'] == 'none':
+                # print('No se ejecutará ninguna acción')
+                pass
+            elif dir['action'] == 'copy':
+                utils.copy_files(dir['in'], dir['out'])
+            elif dir['action'] == 'move':
+                utils.move_files(dir['in'], dir['out'])
 
 
 def main(app, config):
