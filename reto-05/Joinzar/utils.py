@@ -67,8 +67,8 @@ def list_images(directory):
     else:
         contador = 0
         for afile in directory.iterdir():
-            if not afile.is_dir() and \
-            mimetypes.guess_type(afile)[0] == 'image/jpeg':
+            if (not afile.is_dir() and
+                    mimetypes.guess_type(afile)[0] == 'image/jpeg'):
                 print(afile.name)
                 contador += 1
         if contador == 0:

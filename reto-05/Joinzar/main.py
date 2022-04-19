@@ -61,10 +61,11 @@ def step2(path, config):
     conf = Configurator(path, config).read()
     # Controlar que exista contenido, pues crea archivo nuevo vacío
     if len(conf['Directorios']) == 0:
-        print(f"El archivo {config} está vacío. Por favor, incluya ",
-        "algún valor válido")
+        print(
+            f"El archivo {config} está vacío. Por favor, incluya ",
+            "algún valor válido")
     else:
-    # Bloque original del ejercicio
+        # Bloque original del ejercicio
         for dir in conf['Directorios'].values():
             print('=====', dir['in'], '=====')
             # El siguiente bucle sólo tiene sentido si existen ficheros
