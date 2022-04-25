@@ -74,6 +74,6 @@ class Configurator:
                     if item.is_file():
                         dest = dir_ou / item.name
                         if action == 'move':
-                            shutil.copy(item, dest)
-                        elif action == 'copy':
                             shutil.move(item, dest)
+                        elif action == 'copy':
+                            shutil.copy(item, dest)
