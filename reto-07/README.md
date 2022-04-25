@@ -25,6 +25,7 @@ filter = "*.svg"
 in = "/home/lorenzo/ImágenesIn3"
 out = "/home/lorenzo/ImágenesOut3"
 actions = ["copy", "none"]
+filter = "*.txt"
 ```
 
 No tiene por que tener tres entradas, `directorios.1`, `directorios.2` y `directorios.3`. Puede o no tener ninguna o tener tantas como el usuario quiera. Por supuesto las acciones se pueden repetir.
