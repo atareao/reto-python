@@ -1,21 +1,40 @@
-from typing import Callable
+from typing import Protocol
 import _config
 import _executers
 
 CONFIG_PATH = "config.toml"
 
 
+class Executer(Protocol):
+    in_path: str
+    out_path: str
+    extension_filter: str
+
+    def run(self) -> None:
+        ...
+
+
 def execute_action(directory: _config.UserDir):
 
-    Executer = Callable[[str, str, str], None]
-
     executers: dict[_config.Action, Executer] = {
-        _config.Action.NONE: _executers.none,
-        _config.Action.COPY: _executers.copy,
-        _config.Action.MOVE: _executers.move,
+        _config.Action.NONE: _executers.NoneExecuter(
+            in_path=directory.in_,
+            out_path=directory.out,
+            extension_filter=directory.filter_,
+        ),
+        _config.Action.COPY: _executers.CopyExecuter(
+            in_path=directory.in_,
+            out_path=directory.out,
+            extension_filter=directory.filter_,
+        ),
+        _config.Action.MOVE: _executers.MoveExecuter(
+            in_path=directory.in_,
+            out_path=directory.out,
+            extension_filter=directory.filter_,
+        ),
     }
 
-    executers[directory.action](directory.in_, directory.out, directory.filter_)
+    executers[directory.action].run()
 
 
 def main():
