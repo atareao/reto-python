@@ -162,3 +162,4 @@ pyvenv.cfg
 *.whl
 *home/
 .gitignore
+archive/
