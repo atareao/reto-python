@@ -20,7 +20,7 @@ class Action(Enum):
 class UserDir(pydantic.BaseModel):
     in_: str = pydantic.Field(alias="in")
     out: str
-    action: Action
+    actions: list[Action]
     filter_: str = pydantic.Field(
         # regex=r"^\*\.\w+$",
         # description="a filter to select which files to process, like *.jpg",
