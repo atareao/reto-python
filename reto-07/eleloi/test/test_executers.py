@@ -95,3 +95,29 @@ def test_copy_executer_move_existing_files():
     executer.run()
     assert len(os.listdir(move_dir.in_)) == 2
     assert len(os.listdir(move_dir.out)) == 3
+
+
+def test_copy_over_same_out_path():
+    _clean_sample_data_dir()
+    _create_folders_if_dont_exist(copy_dir)
+    _fill_with_sample_files_with_extension(copy_dir.out, 3, "jpg")
+    _fill_with_sample_files_with_extension(copy_dir.out, 2, "txt")
+    assert len(os.listdir(copy_dir.out)) == 5
+    executer = _executers.CopyExecuter(
+        copy_dir.out, copy_dir.out, copy_dir.filter_
+    )
+    executer.run()
+    assert len(os.listdir(copy_dir.out)) == 5
+
+
+def test_move_executer_same_out_path():
+    _clean_sample_data_dir()
+    _create_folders_if_dont_exist(move_dir)
+    _fill_with_sample_files_with_extension(move_dir.out, 3, "jpg")
+    _fill_with_sample_files_with_extension(move_dir.out, 2, "txt")
+    assert len(os.listdir(move_dir.out)) == 5
+    executer = _executers.MoveExecuter(
+        move_dir.out, move_dir.out, move_dir.filter_
+    )
+    executer.run()
+    assert len(os.listdir(move_dir.out)) == 5

@@ -1,11 +1,11 @@
 [[directorios]]
 in = "sample_data/dir1"
 out = "sample_data/dir1_o"
-action = "none"
+actions = ["none"]
 filter = "*.jpg"
 
 [[directorios]]
 in = "sample_data/dir2"
 out = "sample_data/dir2_o"
-action = "none"
+actions = ["none"]
 filter = "*.png"
