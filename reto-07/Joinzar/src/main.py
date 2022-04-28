@@ -51,7 +51,6 @@ from pathlib import Path
 from xdg import xdg_config_home
 from configurator import Configurator
 import utils
-import sys  # para detener ejecución
 
 
 def step1(path, config):
@@ -85,11 +84,8 @@ def step2(path, config):
     else:
         for dir in conf['Directorios'].values():
             filtro = dir['filter']
-            print(filtro)
             print('=====', dir['in'], '=====')
             for act in dir['actions']:
-                print(dir['in'])
-                print(filtro)
                 if dir['actions'] == 'none':
                     # print('No se ejecutará ninguna acción')
                     pass
