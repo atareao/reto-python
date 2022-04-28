@@ -21,7 +21,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from dataclasses import dataclass
 from pathlib import Path
 from xdg import xdg_config_home
 from configurator import Configurator
@@ -35,12 +34,14 @@ def main(app, config):
     for dir in data['directorios'].values():
         print('===', dir['in'], '===')
         list_images(Path(dir['in']))
-        if dir['accion'] == 'copiar':
-            copy(Path(dir['in']), Path(dir['out']))
-        elif dir['accion'] == 'mover':
-            move(Path(dir['in']), Path(dir['out']))
-        elif dir['accion'] == 'nada':
-            print('No se hace Nada en este Caso')
+        if 'accion' in dir:
+            for n in range(len(dir['accion'])):
+                if dir['accion'][n] == 'copy':
+                    copy(Path(dir['in']), Path(dir['out']))
+                elif dir['accion'][n] == 'move':
+                    move(Path(dir['in']), Path(dir['out']))
+                elif dir['accion'][n] == 'none':
+                    print('No se hace Nada en este Caso')
 
 if __name__ == '__main__':
     APP = "diogenes"

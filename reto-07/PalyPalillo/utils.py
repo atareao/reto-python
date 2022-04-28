@@ -17,6 +17,7 @@ def move(dirin,dirout):
     for file in dirin.iterdir():
         if file.is_file():
             fileout = dirout / file.name
+            print(f"moviendo {file.name}")
             os.replace(file, fileout)
 
 def copy(dirin,dirout):
