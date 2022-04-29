@@ -31,7 +31,7 @@ def test_UserDir_accepts_valid_filter():
         **{
             "in": f"dir1",
             "out": f"dir1_o",
-            "action": _config.Action.NONE,
+            "actions": [_config.Action.NONE],
             "filter": "*.jpg",
         }
     )
