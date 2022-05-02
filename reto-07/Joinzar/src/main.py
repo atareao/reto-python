@@ -72,18 +72,6 @@ def step2(path, config):
             "algún valor válido")
     else:
         for dir in conf['Directorios'].values():
-<<<<<<< HEAD
-            filtro = dir['filter']
-            print('=====', dir['in'], '=====')
-            for act in dir['actions']:
-                if dir['actions'] == 'none':
-                    # print('No se ejecutará ninguna acción')
-                    pass
-                elif dir['actions'] == 'copy':
-                    utils.copy_files(dir['in'], dir['out'])
-                elif dir['actions'] == 'move':
-                    utils.move_files(dir['in'], dir['out'])
-=======
             print('=====', dir['in'], '=====')
             utils.list_images(Path(dir['in']))
 
@@ -96,7 +84,6 @@ def step3(path, config):
     """
     conf = Configurator(path, config)
     conf.actions_execute()
->>>>>>> 2c4bb44... versiones definitivas
 
 
 def main(app, config):
