@@ -55,34 +55,24 @@ import utils
 
 def step1(path, config):
     """ Función step1
-
-    ¿Crea una instancia? de la clase Configurator
-
+    Crea una instancia? de la clase Configurator
     """
     Configurator(path, config)
 
 
 def step2(path, config):
-    """ Función step2
-
-    Lee el contenido del archivo de configuración usando módulo read
-    de la clase Configurator y da el valor a la variable conf.
-    Como primer paso, compruebo que el archivo tenga contenido (al
-    menos algún directorio) y si es así, muestra mensaje y no ejecuta
-    nada.
-    En otro caso, imprime el directorio in y según su configuración,
-    hará nada, copiar o mover.
-
+    """ Función step2. Listar imagenes
+    Lista las imágenes que pueda haber en cada directorio
     """
     conf = Configurator(path, config).read()
-    print(conf)
+    # Controlar que exista contenido, pues crea archivo nuevo vacío
     if len(conf['Directorios']) == 0:
-        # print(
-        # f"El archivo {config} está vacío. Por favor, incluya ",
-        # "algún valor válido")
-        pass
+        print(
+            f"El archivo {config} está vacío. Por favor, incluya ",
+            "algún valor válido")
     else:
         for dir in conf['Directorios'].values():
+<<<<<<< HEAD
             filtro = dir['filter']
             print('=====', dir['in'], '=====')
             for act in dir['actions']:
@@ -93,12 +83,27 @@ def step2(path, config):
                     utils.copy_files(dir['in'], dir['out'])
                 elif dir['actions'] == 'move':
                     utils.move_files(dir['in'], dir['out'])
+=======
+            print('=====', dir['in'], '=====')
+            utils.list_images(Path(dir['in']))
+
+
+def step3(path, config):
+    """ Función step3
+    Lee el contenido del archivo de configuración usando módulo read
+    de la clase Configurator y da el valor a la variable conf.
+    Sobre ello, ejecuta el módulo actions_execute de Configurator
+    """
+    conf = Configurator(path, config)
+    conf.actions_execute()
+>>>>>>> 2c4bb44... versiones definitivas
 
 
 def main(app, config):
     path = Path(xdg_config_home()) / app
     step1(path, config)
     step2(path, config)
+    step3(path, config)
 
 
 if __name__ == '__main__':

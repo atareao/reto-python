@@ -49,31 +49,26 @@
 
 import os
 import toml
+import utils
 
 
 class Configurator:
     """ Clase Configurator de Diogenes app
-
     Establece acciones y atributos para la configuración de la app
     Diogenes.
-
     Atributos:
     path: Directorio de archivos de configuración, que se pasen como
     argumento.
     filename: nombre del archivo que se pase como argumento.
-
     """
 
     def __init__(self, path, filename):
         """ Constructor de Configurator
-
         Establece atributos:
         path: Directorio de archivos de configuración, que se pasen como
         argumento.
         filename: nombre del archivo que se pase como argumento.
-
         Ejecuta también función check()
-
         """
         self.path = path
         self.filename = filename
@@ -81,11 +76,9 @@ class Configurator:
 
     def check(self):
         """ Módulo check de la clase Configurator
-
         Comprueba que exista el directorio de configuración. Si no existe
         lo crea y también el fichero de configuración, pero vacío, sin
         valores.
-
         """
         if not self.path.exists():
             os.makedirs(self.path)
@@ -97,21 +90,42 @@ class Configurator:
 
     def read(self):
         """ Módulo read de Configurator.
-
         Lee el fichero de configuración (formato toml) y devuelve el
         contenido en forma de diccionario
-
         """
         config_file = self.path / self.filename
         return toml.load(config_file)
 
     def save(self, conf):
         """ Módulo save de Configurator
-
         Vuelca en el archivo de configuración (formato toml) el
         contenido pasado por argumento.
-
         """
         config_file = self.path / self.filename
         with open(config_file, 'w') as file_writer:
             toml.dump(conf, file_writer)
+
+    def actions_execute(self):
+        """ Módulo actions_execute
+        Ejecuta acciones según fichero de configuración para cada uno
+        de los directorios
+        """
+        conf = self.read()
+        if len(conf['Directorios']) == 0:
+            # print(
+            # f"El archivo {config} está vacío. Por favor, incluya ",
+            # "algún valor válido")
+            pass
+        else:
+            for dir in conf['Directorios'].values():
+                dir_in = dir['in']
+                dir_out = dir['out']
+                filtro = dir['filter']
+                for act in dir['actions']:
+                    if act == 'none':
+                        # print('No se ejecutará ninguna acción')
+                        pass
+                    elif act == 'copy':
+                        utils.copy_files(dir_in, dir_out, filter_fil=filtro)
+                    elif act == 'move':
+                        utils.move_files(dir_in, dir_out, filter_fil=filtro)
