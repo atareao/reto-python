@@ -37,6 +37,8 @@ from configurator import (
     CONFIG_DIR_OUT,)
 from utils import action, glob_factory
 
+
+CONFIG_APP = Path("~/.config/diogenes").expanduser()
 TEST_ROOT = Path('./diogenes').absolute()
 CONFIG_FILE = "diogenes.conf"
 
@@ -71,21 +73,40 @@ CONFIG = {CONFIG_HEADER: {
     #     CONFIG_DIR_OUT: str(TEST_ROOT / "ImágenesOut6"),
     #     "actions": None,
     #     "filter": "*"},
-    "7": {
-        CONFIG_DIR_IN: str(TEST_ROOT / "ImágenesIn7"),
-        CONFIG_DIR_OUT: str(TEST_ROOT / "ImágenesOut7"),
-        "actions": ["cosa"],
-        "filter": "*"}}}
+    # "7": {
+    #     CONFIG_DIR_IN: str(TEST_ROOT / "ImágenesIn7"),
+    #     CONFIG_DIR_OUT: str(TEST_ROOT / "ImágenesOut7"),
+    #     "actions": ["cosa"],
+    #     "filter": "*"}
+    }}
 
-IMAGES_LIST = ["image.jpg", "image.svg", "image.png", "texto.txt"]
+FILES = ["image.jpg", "image.svg", "image.png", "text.txt"]
+
+
+def mkdirs():  # noqa
+    if TEST_ROOT.exists():
+        shutil.rmtree(TEST_ROOT)
+    configurator = Configurator(TEST_ROOT, CONFIG_FILE)
+    configurator.save(CONFIG)
+    config = configurator.read()
+    shutil.copy(TEST_ROOT / CONFIG_FILE, CONFIG_APP)
+    for item in config[CONFIG_HEADER].values():
+        for dir_ in (CONFIG_DIR_IN, CONFIG_DIR_OUT):
+            path = Path(item[dir_])
+            os.makedirs(path)
+            if dir_ == CONFIG_DIR_IN:
+                for f in FILES:
+                    file = path / f
+                    file.touch()
 
 
 class DiogenesTest(unittest.TestCase):
 
     def setUp(self):
-        if Path(CONFIG_FILE).exists():
-            os.remove(CONFIG_FILE)
-        with open(CONFIG_FILE, 'w') as file_writer:
+        config_file = CONFIG_APP / CONFIG_FILE
+        if Path(config_file).exists():
+            os.remove(config_file)
+        with open(config_file, 'wt', encoding='utf-8') as file_writer:
             configuration = {CONFIG_HEADER: {}}
             toml.dump(configuration, file_writer)
         return super().setUp()
@@ -94,65 +115,86 @@ class DiogenesTest(unittest.TestCase):
         return super().tearDown()
 
     def test_configurator(self):
-        with open(CONFIG_FILE, 'w') as file_writer:
+        config_file = CONFIG_APP / CONFIG_FILE
+        with open(config_file, 'wt', encoding='utf-8') as file_writer:
             toml.dump(CONFIG, file_writer)
         # --- 👇 --- aquí va tu código --- 👇 ---
-        configurator = Configurator(TEST_ROOT, CONFIG_FILE)
+        configurator = Configurator(CONFIG_APP, CONFIG_FILE)
         config = configurator.read()
         # --- 👆 --- aquí va tu código --- 👆 ---
-        for item in config.values():
-            dir_in = TEST_ROOT / item[CONFIG_DIR_IN]
-            dir_out = TEST_ROOT / item[CONFIG_DIR_OUT]
+        for item in config[CONFIG_HEADER].values():
+            dir_in = Path(item[CONFIG_DIR_IN])
+            dir_out = Path(item[CONFIG_DIR_OUT])
             self.assertTrue(dir_in.exists())
             self.assertTrue(dir_out.exists())
-        for item in TEST_ROOT.iterdir():
-            if item.is_dir():
-                shutil.rmtree(item)
-            else:
-                os.remove(item)
 
     def test_actions(self):
-        with open(CONFIG_FILE, 'w') as file_writer:
+        config_file = CONFIG_APP / CONFIG_FILE
+        with open(config_file, 'wt', encoding='utf-8') as file_writer:
             toml.dump(CONFIG, file_writer)
         # --- 👇 --- aquí va tu código --- 👇 ---
-        configurator = Configurator(TEST_ROOT, CONFIG_FILE)
+        configurator = Configurator(CONFIG_APP, CONFIG_FILE)
         config = configurator.read()
         # --- 👆 --- aquí va tu código --- 👆 ---
-        print(config)
-        for item in config.values():
-            print(item)
-            dir_in = TEST_ROOT / item[CONFIG_DIR_IN]
-            dir_out = TEST_ROOT / item[CONFIG_DIR_OUT]
+        for item in config[CONFIG_HEADER].values():
+            dir_in = Path(item[CONFIG_DIR_IN])
+            dir_out = Path(item[CONFIG_DIR_OUT])
             self.assertTrue(dir_in.exists())
             self.assertTrue(dir_out.exists())
-            for name in IMAGES_LIST:
+            for name in FILES:
                 file = dir_in / name
                 file.touch()
                 self.assertTrue(file.exists())
-            for name in IMAGES_LIST:
+            for name in FILES:
                 self.assertIn(dir_in / name, dir_in.iterdir())
                 self.assertNotIn(dir_out / name, dir_out.iterdir())
-        # --- 👇 --- aquí va tu código --- 👇 ---
             filtro = glob_factory(item['filter'])
+        # --- 👇 --- aquí va tu código --- 👇 ---
             for action_name in item['actions']:
+                if action_name == "none":
+                    all_files_input_inicial = \
+                        set(str(p) for p in dir_in.iterdir())
+                    all_files_output_inicial = \
+                        set(str(p) for p in dir_out.iterdir())
                 action[action_name](dir_in, dir_out, fltr=filtro)
         # --- 👆 --- aquí va tu código --- 👆 ---
                 if action_name == 'none':
-                    for name in IMAGES_LIST:
-                        self.assertIn(dir_in / name, dir_in.iterdir())
-                        self.assertNotIn(dir_out / name, dir_out.iterdir())
+                    all_files_input = set(str(p) for p in dir_in.iterdir())
+                    all_files_output = set(str(p) for p in dir_out.iterdir())
+                    self.assertTrue(
+                        all_files_input_inicial == all_files_input)
+                    self.assertTrue(
+                        all_files_output_inicial == all_files_output)
                 elif action_name == 'move':
-                    for name in IMAGES_LIST:
-                        self.assertNotIn(dir_in / name, dir_in.iterdir())
-                        self.assertIn(dir_out / name, dir_out.iterdir())
+                    all_files = set(str(p) for p in dir_in.iterdir())
+                    sel_files = filtro(all_files)
+                    nosel_files = all_files - sel_files
+                    for elem in sel_files:
+                        elem_in = dir_in / Path(elem).name
+                        elem_out = dir_out / Path(elem).name
+                        self.assertNotIn(elem_in, dir_in.iterdir())
+                        self.assertIn(elem_out, dir_out.iterdir())
+                    for elem in nosel_files:
+                        elem_in = dir_in / Path(elem).name
+                        elem_out = dir_out / Path(elem).name
+                        self.assertIn(elem_in, dir_in.iterdir())
+                        self.assertNotIn(elem_out, dir_out.iterdir())
                 else:  # action_name == 'copy':
-                    for name in IMAGES_LIST:
-                        self.assertIn(dir_in / name, dir_in.iterdir())
-                        self.assertIn(dir_out / name, dir_out.iterdir())
-        for item in TEST_ROOT.iterdir():
-            if item.is_dir():
-                shutil.rmtree(item)
+                    all_files = set(str(p) for p in dir_in.iterdir())
+                    sel_files = filtro(all_files)
+                    nosel_files = all_files - sel_files
+                    for elem in sel_files:
+                        elem_in = dir_in / Path(elem).name
+                        elem_out = dir_out / Path(elem).name
+                        self.assertIn(elem_in, dir_in.iterdir())
+                        self.assertIn(elem_out, dir_out.iterdir())
+                    for elem in nosel_files:
+                        elem_in = dir_in / Path(elem).name
+                        elem_out = dir_out / Path(elem).name
+                        self.assertIn(elem_in, dir_in.iterdir())
+                        self.assertNotIn(elem_out, dir_out.iterdir())
 
 
 if __name__ == '__main__':
+    mkdirs()
     unittest.main()

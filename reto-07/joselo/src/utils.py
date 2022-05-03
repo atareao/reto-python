@@ -87,10 +87,10 @@ def __move(path_in: Path, path_out: Path,
         if not dest.exists():
             shutil.move(path_in / src, path_out)
         else:
-            print("Action move:\n"
+            print("Action move:\n\n"
                   f"No es posible mover {src} a {str(path_out)} "
-                  "porque ya existe un fichero con el mismo nombre.\n\n"
-                  f"Se procede a borrar el fichero {src} de {str(path_in)}.")
+                  "porque ya existe un fichero con el mismo nombre y "
+                  f"se procede a borrar el fichero {src} de {str(path_in)}.")
             os.remove(path_in / src)
 
 

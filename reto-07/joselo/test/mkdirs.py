@@ -77,9 +77,10 @@ CONFIG = {CONFIG_HEADER: {
         "actions": ["cosa"],
         "filter": "*"}}}
 
-FILES_LIST = ["image.jpg", "image.svg", "image.png", "text.txt"]
+FILES = ["image.jpg", "image.svg", "image.png", "text.txt"]
 
-if __name__ == '__main__':
+
+def mkdirs():  # noqa
     if TEST_ROOT.exists():
         shutil.rmtree(TEST_ROOT)
     configurator = Configurator(TEST_ROOT, CONFIG_FILE)
@@ -91,6 +92,10 @@ if __name__ == '__main__':
             path = Path(item[dir_])
             os.makedirs(path)
             if dir_ == CONFIG_DIR_IN:
-                for f in FILES_LIST:
+                for f in FILES:
                     file = path / f
                     file.touch()
+
+
+if __name__ == '__main__':
+    mkdirs()
