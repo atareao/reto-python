@@ -57,7 +57,7 @@ def list_all(d_in: Path, d_out: Path) -> None:
 # =====================================================================
 # FILTROS
 #
-# Ver https://gist.github.com/jlnc/26c041127117c1932929225097db96cd
+# Ver https://gist.github.com/jlnc/522598f97c1ff64e3e740bea5c5e7387
 #
 def glob_factory(glb: str) -> callable:  # noqa
     def filter_glob(files: set) -> set:
