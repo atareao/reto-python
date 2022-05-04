@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2022 Lorenzo Carbonell <a.k.a. atareao>
 # Copyright (c) 2022 José Lorenzo Nieto Corral <a.k.a. jlnc> <a.k.a. JoseLo>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -149,48 +148,48 @@ class DiogenesTest(unittest.TestCase):
                 self.assertIn(dir_in / name, dir_in.iterdir())
                 self.assertNotIn(dir_out / name, dir_out.iterdir())
             filtro = glob_factory(item['filter'])
-        # --- 👇 --- aquí va tu código --- 👇 ---
             for action_name in item['actions']:
                 if action_name == "none":
                     all_files_input_inicial = \
-                        set(str(p) for p in dir_in.iterdir())
+                        set(p.name for p in dir_in.iterdir())
                     all_files_output_inicial = \
-                        set(str(p) for p in dir_out.iterdir())
+                        set(p.name for p in dir_out.iterdir())
+        # --- 👇 --- aquí va tu código --- 👇 ---
                 action[action_name](dir_in, dir_out, fltr=filtro)
         # --- 👆 --- aquí va tu código --- 👆 ---
                 if action_name == 'none':
-                    all_files_input = set(str(p) for p in dir_in.iterdir())
-                    all_files_output = set(str(p) for p in dir_out.iterdir())
+                    all_files_input = set(p.name for p in dir_in.iterdir())
+                    all_files_output = set(p.name for p in dir_out.iterdir())
                     self.assertTrue(
                         all_files_input_inicial == all_files_input)
                     self.assertTrue(
                         all_files_output_inicial == all_files_output)
                 elif action_name == 'move':
-                    all_files = set(str(p) for p in dir_in.iterdir())
+                    all_files = set(p.name for p in dir_in.iterdir())
                     sel_files = filtro(all_files)
                     nosel_files = all_files - sel_files
                     for elem in sel_files:
-                        elem_in = dir_in / Path(elem).name
-                        elem_out = dir_out / Path(elem).name
+                        elem_in = dir_in / elem
+                        elem_out = dir_out / elem
                         self.assertNotIn(elem_in, dir_in.iterdir())
                         self.assertIn(elem_out, dir_out.iterdir())
                     for elem in nosel_files:
-                        elem_in = dir_in / Path(elem).name
-                        elem_out = dir_out / Path(elem).name
+                        elem_in = dir_in / elem
+                        elem_out = dir_out / elem
                         self.assertIn(elem_in, dir_in.iterdir())
                         self.assertNotIn(elem_out, dir_out.iterdir())
                 else:  # action_name == 'copy':
-                    all_files = set(str(p) for p in dir_in.iterdir())
+                    all_files = set(p.name for p in dir_in.iterdir())
                     sel_files = filtro(all_files)
                     nosel_files = all_files - sel_files
                     for elem in sel_files:
-                        elem_in = dir_in / Path(elem).name
-                        elem_out = dir_out / Path(elem).name
+                        elem_in = dir_in / elem
+                        elem_out = dir_out / elem
                         self.assertIn(elem_in, dir_in.iterdir())
                         self.assertIn(elem_out, dir_out.iterdir())
                     for elem in nosel_files:
-                        elem_in = dir_in / Path(elem).name
-                        elem_out = dir_out / Path(elem).name
+                        elem_in = dir_in / elem
+                        elem_out = dir_out / elem
                         self.assertIn(elem_in, dir_in.iterdir())
                         self.assertNotIn(elem_out, dir_out.iterdir())
 

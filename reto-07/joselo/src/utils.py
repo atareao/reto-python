@@ -60,7 +60,7 @@ def list_all(d_in: Path, d_out: Path) -> None:
 # Ver https://gist.github.com/jlnc/522598f97c1ff64e3e740bea5c5e7387
 #
 def glob_factory(glb: str) -> callable:  # noqa
-    def filter_glob(files: set) -> set:
+    def filter_glob(files: set[str]) -> set[str]:
         return set(fnmatch.filter(files, glb))
     return filter_glob
 
@@ -81,7 +81,7 @@ filter_txt = glob_factory('*.txt')
 #
 def __move(path_in: Path, path_out: Path,
            fltr: callable = filter_all) -> None:
-    files = set([f.name for f in path_in.iterdir()])
+    files = set(f.name for f in path_in.iterdir())
     for src in fltr(files):
         dest = path_out / src
         if not dest.exists():
@@ -90,13 +90,13 @@ def __move(path_in: Path, path_out: Path,
             print("Action move:\n\n"
                   f"No es posible mover {src} a {str(path_out)} "
                   "porque ya existe un fichero con el mismo nombre y "
-                  f"se procede a borrar el fichero {src} de {str(path_in)}.")
+                  f"se procede a borrar el fichero {src} de {str(path_in)}.\n")
             os.remove(path_in / src)
 
 
 def __copy(path_in: Path, path_out: Path,
            fltr: callable = filter_all) -> None:
-    files = set([f.name for f in path_in.iterdir()])
+    files = set(f.name for f in path_in.iterdir())
     for src in fltr(files):
         dest = path_out / src
         if not dest.exists():

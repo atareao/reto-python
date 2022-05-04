@@ -71,11 +71,12 @@ CONFIG = {CONFIG_HEADER: {
     #     CONFIG_DIR_OUT: str(TEST_ROOT / "ImágenesOut6"),
     #     "actions": None,
     #     "filter": "*"},
-    "7": {
-        CONFIG_DIR_IN: str(TEST_ROOT / "ImágenesIn7"),
-        CONFIG_DIR_OUT: str(TEST_ROOT / "ImágenesOut7"),
-        "actions": ["cosa"],
-        "filter": "*"}}}
+    # "7": {
+    #     CONFIG_DIR_IN: str(TEST_ROOT / "ImágenesIn7"),
+    #     CONFIG_DIR_OUT: str(TEST_ROOT / "ImágenesOut7"),
+    #     "actions": ["cosa"],
+    #     "filter": "*"}}}
+    }}
 
 FILES = ["image.jpg", "image.svg", "image.png", "text.txt"]
 

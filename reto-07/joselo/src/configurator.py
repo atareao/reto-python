@@ -76,11 +76,6 @@ class Configurator:
         3) Si existe el fichero de configuración, lo lee y crea todos
            los directorios definidos en él.
 
-           No verifica si los paths de esos directorios contienen cosas
-           como ~/directorio, $HOME/directorio, ../../directorio, etc
-           pero debería, ya que en esos casos se crean paths relativos
-           al directorio actual: ${PWD}/"~/directorio",
-           ${PWD}/"$HOME/directorio", etc y no es eso lo que queremos.
 
         Returns
         -------
