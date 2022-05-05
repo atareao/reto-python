@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""Diogenes, reto 07: test_diogenes(test)"""
+
 # Copyright (c) 2022 José Lorenzo Nieto Corral <a.k.a. jlnc> <a.k.a. JoseLo>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,57 +31,17 @@ import toml
 import unittest
 
 sys.path.append(os.path.join("../src"))  # noqa
-from configurator import (
-    Configurator,
-    CONFIG_HEADER,
+from _constants import (
+    CONFIG,
+    CONFIG_APP,
     CONFIG_DIR_IN,
-    CONFIG_DIR_OUT,)
+    CONFIG_DIR_OUT,
+    CONFIG_FILE,
+    CONFIG_HEADER,
+    FILES,
+    TEST_ROOT,)
+from configurator import Configurator
 from utils import action, glob_factory
-
-
-CONFIG_APP = Path("~/.config/diogenes").expanduser()
-TEST_ROOT = Path('./diogenes').absolute()
-CONFIG_FILE = "diogenes.conf"
-
-CONFIG = {CONFIG_HEADER: {
-    "1": {
-        CONFIG_DIR_IN: str(TEST_ROOT / "ImágenesIn1"),
-        CONFIG_DIR_OUT: str(TEST_ROOT / "ImágenesOut1"),
-        "actions": ["copy", "move"],
-        "filter": "*.png"},
-    "2": {
-        CONFIG_DIR_IN: str(TEST_ROOT / "ImágenesIn2"),
-        CONFIG_DIR_OUT: str(TEST_ROOT / "ImágenesOut2"),
-        "actions": ["move"],
-        "filter": "*.svg"},
-    "3": {
-        CONFIG_DIR_IN: str(TEST_ROOT / "ImágenesIn3"),
-        CONFIG_DIR_OUT: str(TEST_ROOT / "ImágenesOut3"),
-        "actions": ["copy", "none"],
-        "filter": "*.txt"},
-    "4": {
-        CONFIG_DIR_IN: str(TEST_ROOT / "ImágenesIn4"),
-        CONFIG_DIR_OUT: str(TEST_ROOT / "ImágenesOut4"),
-        "actions": [],
-        "filter": "*"},
-    "5": {
-        CONFIG_DIR_IN: str(TEST_ROOT / "ImágenesIn5"),
-        CONFIG_DIR_OUT: str(TEST_ROOT / "ImágenesOut5"),
-        "actions": ["move"],
-        "filter": ""},
-    # "6": {
-    #     CONFIG_DIR_IN: str(TEST_ROOT / "ImágenesIn6"),
-    #     CONFIG_DIR_OUT: str(TEST_ROOT / "ImágenesOut6"),
-    #     "actions": None,
-    #     "filter": "*"},
-    # "7": {
-    #     CONFIG_DIR_IN: str(TEST_ROOT / "ImágenesIn7"),
-    #     CONFIG_DIR_OUT: str(TEST_ROOT / "ImágenesOut7"),
-    #     "actions": ["cosa"],
-    #     "filter": "*"}
-    }}
-
-FILES = ["image.jpg", "image.svg", "image.png", "text.txt"]
 
 
 def mkdirs():  # noqa

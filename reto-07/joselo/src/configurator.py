@@ -23,6 +23,11 @@
 # SOFTWARE.
 
 
+from _constants import (
+    CONFIG_DEFAULT,
+    CONFIG_DIR_IN,
+    CONFIG_DIR_OUT,
+    CONFIG_HEADER,)
 import os
 from pathlib import Path
 import toml
@@ -31,12 +36,6 @@ from typing import (
     Dict,
     MutableMapping,
     Union)
-
-
-CONFIG_HEADER = "directorios"
-CONFIG_DIR_IN = "in"
-CONFIG_DIR_OUT = "out"
-CONFIG_DEFAULT = {CONFIG_HEADER: {}}
 
 
 class Configurator:

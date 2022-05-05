@@ -23,13 +23,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pathlib import Path
-from xdg import xdg_config_home
-from configurator import (
-    Configurator,
+from _constants import (
     CONFIG_HEADER,
     CONFIG_DIR_IN,
     CONFIG_DIR_OUT,)
+from pathlib import Path
+from xdg import xdg_config_home
+from configurator import Configurator
 from utils import (
     list_all,
     action,
