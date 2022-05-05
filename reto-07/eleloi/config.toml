@@ -1,0 +1,11 @@
+[[directorios]]
+in = "sample_data/dir1"
+out = "sample_data/dir1_o"
+actions = ["move", "copy"]
+filter= "*.jpg"
+
+[[directorios]]
+in = "sample_data/dir2"
+out = "sample_data/dir2_o"
+actions = ["copy", "none"]
+filter = "*.txt"
