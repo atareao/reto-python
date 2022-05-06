@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Diogenes, reto-07: clase Configurator."""
+"""atareao/reto-python, reto-07: clase Configurator."""
 
 # Copyright (c) 2022 José Lorenzo Nieto Corral <a.k.a. jlnc> <a.k.a. JoseLo>
 

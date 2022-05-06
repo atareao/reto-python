@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Diogenes, reto-07: utilidades."""
+"""atareao/reto-python, reto-07: utilidades."""
 
 # Copyright (c) 2022 José Lorenzo Nieto Corral <a.k.a. jlnc> <a.k.a. JoseLo>
 

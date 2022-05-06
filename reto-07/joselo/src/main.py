@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Diogenes, reto-07: main."""
+"""atareao/reto-python, reto-07: main."""
 
 # Copyright (c) 2022 José Lorenzo Nieto Corral <a.k.a. jlnc> <a.k.a JoseLo>
 
