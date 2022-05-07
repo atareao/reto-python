@@ -31,7 +31,7 @@ from wand.image import Image
 class ResizeImage:
     """ResizeImage."""
 
-    def __init__(self, filein: Path, fileout: Path, args: dict[str, int]) -> None:
+    def __init__(self, filein: Path, fileout: Path, args: dict[str, int]) -> None:  # noqa
         self.__filein = Path(filein)
         self.__fileout = Path(fileout)
         try:
@@ -60,7 +60,7 @@ class ResizeImage:
 
         if self.__fileout.is_dir():
             raise ValueError(
-                f"El argumento 'fileout' debe ser un fichero, no un directorio.")
+                "El argumento 'fileout' debe ser un fichero, no un directorio.")
 
         return True
 
