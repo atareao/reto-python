@@ -60,7 +60,7 @@ class ResizeImage:
 
         if self.__fileout.is_dir():
             raise ValueError(
-                "El argumento 'fileout' debe ser un fichero, no un directorio.")
+                "El argumento 'fileout' debe ser un fichero no un directorio.")
 
         return True
 
