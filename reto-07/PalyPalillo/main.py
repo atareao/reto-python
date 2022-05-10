@@ -24,22 +24,34 @@
 from pathlib import Path
 from xdg import xdg_config_home
 from configurator import Configurator
-from utils import list_images,copy, move
+from utils import list_images, copy, move
 
+def set_filter(dir):
+    if 'filter' in dir:
+        filtro=dir['filter'][1:]        
+    else:
+        filtro=''
+    return filtro
+    
+def to_do(data):
+    for dir in data['directorios'].values():
+        print('===', dir['in'], '===')
+        list_images(Path(dir['in']))
+        filtro=set_filter(dir)
+        if 'accion' in dir:
+            for n in range(len(dir['accion'])):
+                if dir['accion'][n] == 'copy':
+                    copy(Path(dir['in']), Path(dir['out']), filtro)
+                elif dir['accion'][n] == 'move':
+                    move(Path(dir['in']), Path(dir['out']), filtro)
+                elif dir['accion'][n] == 'none':
+                    print('No se hace Nada en este Caso')
 
 def main(app, config):
     path = Path(xdg_config_home()) / app
     configurator = Configurator(path, config)
     data = configurator.read()
-    for dir in data['directorios'].values():
-        print('===', dir['in'], '===')
-        list_images(Path(dir['in']))
-        if dir['accion'] == 'copy':
-            copy(Path(dir['in']), Path(dir['out']))
-        elif dir['accion'] == 'move':
-            move(Path(dir['in']), Path(dir['out']))
-        elif dir['accion'] == 'none':
-            print('No se hace Nada en este Caso')
+    to_do(data)
 
 if __name__ == '__main__':
     APP = "diogenes"

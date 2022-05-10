@@ -9,27 +9,30 @@ def list_images(directorio):
         if not file.is_dir() and mimetypes.guess_type(file)[0] == 'image/jpeg':
             print(file.name)
             
-def move(dirin,dirout):
+def move(dirin,dirout,filtro):
     if not dirin.exists():
         os.makedirs(dirin)
     elif not dirout.exists():
         os.makedirs(dirout)
     for file in dirin.iterdir():
-        if file.is_file():
-            fileout = dirout / file.name
-            print(f"moviendo {file.name}")
+        nombre=file.name
+        if file.is_file() and nombre.lower().endswith(str.lower(filtro)):
+            fileout = dirout / nombre
+            print(f"moviendo {nombre}")
             os.replace(file, fileout)
 
-def copy(dirin,dirout):
+def copy(dirin,dirout,filtro):
     if not dirin.exists():
         os.makedirs(dirin)
     elif not dirout.exists():
         os.makedirs(dirout)
     for file in dirin.iterdir():
-        fileout = dirout / file.name
+        nombre=file.name
+        fileout = dirout / nombre
         if file.is_file() and not fileout.exists():
-            print(f"copiando {file.name}")
-            shutil.copy(file, dirout)
+            if nombre.lower().endswith(str.lower(filtro)):
+                print(f"copiando {nombre}")
+                shutil.copy(file, dirout)
         else:    
-            print(f"el archivo {file.name} ya existe en destino")
+            print(f"el archivo {nombre} ya existe en destino")
             
