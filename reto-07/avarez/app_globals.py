@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
+
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2022 Lorenzo Carbonell <a.k.a. atareao>
+# Author: Andrés Pérez <a.k.a. avarez>
+# Copyright (c)
+# Created: 14 April 2022
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -15,33 +18,11 @@
 
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pathlib import Path
-from xdg import xdg_config_home
-from configurator import Configurator
-from utils import list_images,copy, move
-
-
-def main(app, config):
-    path = Path(xdg_config_home()) / app
-    configurator = Configurator(path, config)
-    data = configurator.read()
-    for dir in data['directorios'].values():
-        print('===', dir['in'], '===')
-        list_images(Path(dir['in']))
-        if dir['accion'] == 'copy':
-            copy(Path(dir['in']), Path(dir['out']))
-        elif dir['accion'] == 'move':
-            move(Path(dir['in']), Path(dir['out']))
-        elif dir['accion'] == 'none':
-            print('No se hace Nada en este Caso')
-
-if __name__ == '__main__':
-    APP = "diogenes"
-    config = f"{APP}.conf"
-    main(APP, config)
+APP = "diogenes"
+CONFIG = f"{APP}.conf"
