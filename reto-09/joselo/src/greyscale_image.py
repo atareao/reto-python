@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Reto 08: clase GreyscaleImage."""
+"""Reto 09: clase GreyscaleImage."""
 
 # Copyright (c) 2022 José Lorenzo Nieto Corral <a.k.a. jlnc> <a.k.a. JoseLo>
 
@@ -52,10 +52,8 @@ class GreyscaleImage:
 
 
 def main():  # noqa
-    # filein = Path('/home/lorenzo/kk/bb.png')
-    # fileout = Path('/home/lorenzo/kk/salida.png')
-    filein = Path("../test/proxy-image.png")
-    fileout = Path("../test/greyscale_proxy-image.png")
+    filein = Path('/home/lorenzo/kk/bb.png')
+    fileout = Path('/home/lorenzo/kk/salida.png')
     greyscale_image = GreyscaleImage(filein, fileout)
     if greyscale_image.check():
         greyscale_image.execute()
