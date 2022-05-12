@@ -29,7 +29,7 @@ from wand.image import Image
 
 
 class GreyscaleImage:
-    """ResizeImage."""
+    """GreyscaleImage."""
 
     def __init__(self, filein: Path, fileout: Path) -> None:
         self.__filein = Path(filein)
