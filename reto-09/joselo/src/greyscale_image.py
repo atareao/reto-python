@@ -44,9 +44,9 @@ class GreyscaleImage:
     def execute(self) -> None:
         """execute."""
         try:
-            self.__image = Image(filename=self.__filein)
-            self.__image.transform_colorspace('gray')
-            self.__image.save(filename=self.__fileout)
+            image = Image(filename=self.__filein)
+            image.transform_colorspace('gray')
+            image.save(filename=self.__fileout)
         except WandException:
             pass
 
