@@ -46,7 +46,7 @@ from pathlib import Path
 from PIL import Image, ImageOps
 
 
-class Greyed_Image:
+class Greyed_Image():
     def __init__(self, filein, fileout):
         """ Constructor
         """
