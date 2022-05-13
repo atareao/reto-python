@@ -27,3 +27,7 @@ class ImageUtils():
             resize_image.save(self.__imageout)
         else:
             print("no se ha introducido nuevo tamaño")
+            
+    def greyscale_image(self):
+        greyscale_image = self.__image.convert("L")
+        greyscale_image.save(self.__imageout)
