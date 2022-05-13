@@ -14,17 +14,16 @@ class ImageUtils():
             return False
         if not self.__imageout.parent.exists() or not self.__imageout.parent.is_dir():
             return False
-        if "width" not in self.__args:
-            return False
-        if (self.__args['width']/self.__args['height']) != (self.__image.width/self.__image.height):
-            print("Proporciones no validas elige una altura y ancho correctos")
-            print( f"ejemplo para esta imagen width: {self.__args['width']} "\
-                f"height: {(self.__image.height/self.__image.width)*self.__args['width']}")
-            return False
-        else:
-            return True
+        return True
     
     def resize_image(self):
-        resize_image = self.__image.resize((self.__args['width'],
-                                     self.__args['height']))
-        resize_image.save(self.__imageout)
+        if "w" in self.__args and "h" in self.__args:
+            if (self.__args['w']/self.__args['h']) != (self.__image.width/self.__image.height):
+                print("La Imagen de Salida no guarda las Proporciones")
+                print( f"ejemplo para esta imagen w: {self.__args['w']} "\
+                    f"h: {(self.__image.height/self.__image.width)*self.__args['w']}")
+            resize_image = self.__image.resize((self.__args['w'],
+                                        self.__args['h']))
+            resize_image.save(self.__imageout)
+        else:
+            print("no se ha introducido nuevo tamaño")
