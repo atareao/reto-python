@@ -7,14 +7,14 @@ Igual que sucedía en el reto anterior, la clase tiene que tener al menos dos m�
 De cada tipo de archivo haremos de dos a tres acciones, para que veas las posibilidades, y luego daremos el salto a combinarla con el código anterior.
 
 ```
-class ResizeImage:
+class Image2Gray:
     ...
     ...
 
 def main():
     filein = Path('/home/lorenzo/kk/bb.png')
     fileout = Path('/home/lorenzo/kk/bb_grayscale.png')
-    action = GreyscaleImage(filein, fileout)
+    action = Image2Gray(filein, fileout)
     if action.check():
         action.execute()
 ```
