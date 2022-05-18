@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2022 Lorenzo Carbonell <a.k.a. atareao>
+"""Diogenes, reto 07: mkdirs(aux)."""
+
+# Copyright (c) 2022 José Lorenzo Nieto Corral <a.k.a. jlnc> <a.k.a. JoseLo>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,27 +23,40 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
 from pathlib import Path
-from xdg import xdg_config_home
+import shutil
+import sys
+
+sys.path.append(os.path.join("../src"))  # noqa
+from _constants import (
+    CONFIG,
+    CONFIG_APP,
+    CONFIG_DIR_IN,
+    CONFIG_DIR_OUT,
+    CONFIG_FILE,
+    CONFIG_HEADER,
+    FILES,
+    TEST_ROOT,)
 from configurator import Configurator
-from utils import list_images,copy, move
 
 
-def main(app, config):
-    path = Path(xdg_config_home()) / app
-    configurator = Configurator(path, config)
-    data = configurator.read()
-    for dir in data['directorios'].values():
-        print('===', dir['in'], '===')
-        list_images(Path(dir['in']))
-        if dir['accion'] == 'copy':
-            copy(Path(dir['in']), Path(dir['out']))
-        elif dir['accion'] == 'move':
-            move(Path(dir['in']), Path(dir['out']))
-        elif dir['accion'] == 'none':
-            print('No se hace Nada en este Caso')
+def mkdirs():  # noqa
+    if TEST_ROOT.exists():
+        shutil.rmtree(TEST_ROOT)
+    configurator = Configurator(TEST_ROOT, CONFIG_FILE)
+    configurator.save(CONFIG)
+    config = configurator.read()
+    shutil.copy(TEST_ROOT / CONFIG_FILE, CONFIG_APP)
+    for item in config[CONFIG_HEADER].values():
+        for dir_ in (CONFIG_DIR_IN, CONFIG_DIR_OUT):
+            path = Path(item[dir_])
+            os.makedirs(path)
+            if dir_ == CONFIG_DIR_IN:
+                for f in FILES:
+                    file = path / f
+                    file.touch()
+
 
 if __name__ == '__main__':
-    APP = "diogenes"
-    config = f"{APP}.conf"
-    main(APP, config)
+    mkdirs()

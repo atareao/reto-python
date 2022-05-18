@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2022 Lorenzo Carbonell <a.k.a. atareao>
+"""atareao/reto-python, reto-07: main."""
+
+# Copyright (c) 2022 José Lorenzo Nieto Corral <a.k.a. jlnc> <a.k.a JoseLo>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +23,51 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from _constants import (
+    CONFIG_HEADER,
+    CONFIG_DIR_IN,
+    CONFIG_DIR_OUT,)
 from pathlib import Path
 from xdg import xdg_config_home
 from configurator import Configurator
-from utils import list_images,copy, move
+from utils import (
+    list_all,
+    action,
+    glob_factory)
 
 
 def main(app, config):
+    """El main."""
     path = Path(xdg_config_home()) / app
-    configurator = Configurator(path, config)
-    data = configurator.read()
-    for dir in data['directorios'].values():
-        print('===', dir['in'], '===')
-        list_images(Path(dir['in']))
-        if dir['accion'] == 'copy':
-            copy(Path(dir['in']), Path(dir['out']))
-        elif dir['accion'] == 'move':
-            move(Path(dir['in']), Path(dir['out']))
-        elif dir['accion'] == 'none':
-            print('No se hace Nada en este Caso')
+    conf = Configurator(path, config).read()
+
+    for item in conf[CONFIG_HEADER].values():
+
+        # Leer el path a los dos directorios y la acción.
+        dir_in = Path(item[CONFIG_DIR_IN])
+        dir_out = Path(item[CONFIG_DIR_OUT])
+
+        # Ver el contenido de los directorios ANTES de la acción.
+        print(
+            "\t -- {antes de: "
+            f"{repr(item['actions'])}; filtro: {item['filter']}"
+            "} --\n")
+        list_all(dir_in, dir_out)
+
+        # Ejecutar las acciones.
+        for action_name in item['actions']:
+            filtro = glob_factory(item['filter'])
+            action[action_name](dir_in, dir_out, fltr=filtro)
+
+        # Ver el contenido de los directorios DESPUÉS de la acción.
+        print(
+            "\t -- {después de: "
+            f"{repr(item['actions'])}; filtro: {item['filter']}"
+            "} --\n")
+        list_all(dir_in, dir_out)
+
+        print(f"{80*'_'}\n")
+
 
 if __name__ == '__main__':
     APP = "diogenes"
