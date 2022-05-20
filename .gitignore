@@ -163,3 +163,4 @@ pyvenv.cfg
 *home/
 .gitignore
 archive/
+*.sublime-*
