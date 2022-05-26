@@ -26,26 +26,31 @@
 from pathlib import Path
 from PIL import Image
 import pilgram
+from typing import Optional
 
 
 class InstagramImage:
     """InstagramImage."""
 
-    FILTROS = {
+    _FILTROS = (
         "_1977", "aden", "brannan", "brooklyn", "clarendon", "earlybird",
         "gingham", "hudson", "inkwell", "kelvin", "lark", "lofi",
         "maven", "mayfair", "moon", "nashville", "perpetua", "reyes",
         "rise", "slumber", "stinson", "toaster", "valencia", "walden",
-        "willow", "xpro2", }
+        "willow", "xpro2")
 
-    def __init__(self, filein: Path, fileout: Path, args: dict = None) -> None:
+    def __init__(self, filein: Path, fileout: Path,
+                 args: Optional[dict[str, str]] = None) -> None:
+
         self.__filein = Path(filein)
         self.__fileout = Path(fileout)
+
         try:
             self.__filter = args['filter']
         except KeyError:
             raise
-        if self.__filter not in InstagramImage.FILTROS:
+
+        if self.__filter not in InstagramImage._FILTROS:
             raise ValueError(
                 f"{self.__filter} no está en la lista de filtros.")
 
