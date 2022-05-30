@@ -24,47 +24,50 @@
 # SOFTWARE.
 
 from pathlib import Path
+from typing import Optional
 from PIL import Image
 import pilgram
-from typing import Optional
 
 
 class InstagramImage:
     """InstagramImage."""
 
-    _FILTROS = (
-        "_1977", "aden", "brannan", "brooklyn", "clarendon", "earlybird",
-        "gingham", "hudson", "inkwell", "kelvin", "lark", "lofi",
-        "maven", "mayfair", "moon", "nashville", "perpetua", "reyes",
-        "rise", "slumber", "stinson", "toaster", "valencia", "walden",
-        "willow", "xpro2")
+    # pilgram.__all__[0] es '__version__'
+    _FILTROS: list[str] = pilgram.__all__[1:]
 
     def __init__(self, filein: Path, fileout: Path,
                  args: Optional[dict[str, str]] = None) -> None:
 
         self.__filein = Path(filein)
         self.__fileout = Path(fileout)
+        self.__filter = None
+        filtro = args['filter'] if 'filter' in args else None
+        if filtro in self._FILTROS:
+            self.__filter = eval(f"pilgram.{filtro}")
 
-        try:
-            self.__filter = args['filter']
-        except KeyError:
-            raise
-
-        if self.__filter not in InstagramImage._FILTROS:
-            raise ValueError(
-                f"{self.__filter} no está en la lista de filtros.")
+    # Por conveniencia, para que la función test pueda ejecutar todos los
+    # filtros, uno detrás de otro.
+    @classmethod
+    def filtros(cls) -> list:
+        """Acceso a InstagramImage._FILTROS desde objetos externos."""
+        return cls._FILTROS
 
     def check(self) -> bool:
         """check."""
-        return self.__filein.is_file() \
+        return self.__filter is not None \
+            and self.__filein.is_file() \
             and not self.__filein.is_symlink() \
+            and self.__fileout.parent.is_dir() \
             and not self.__fileout.exists()
 
     def execute(self) -> None:
         """execute."""
-        image = Image.open(self.__filein)
-        image = eval(f"pilgram.{self.__filter}(image)")
-        image.save(self.__fileout)
+        try:
+            image = Image.open(self.__filein)
+            image = self.__filter(image)
+            image.save(self.__fileout)
+        except Exception:
+            pass
 
 
 def main():  # noqa
@@ -76,5 +79,16 @@ def main():  # noqa
         action.execute()
 
 
+def test():  # noqa
+    filein = Path("/home/lorenzo/kk/bb.jpg")
+    for filter_name in InstagramImage.filtros():
+        fileout = Path(f"/home/lorenzo/kk/bb_{filter_name}.jpg")
+        action = InstagramImage(filein, fileout, {'filter': filter_name})
+        if action.check():
+            print(filter_name)
+            action.execute()
+
+
 if __name__ == '__main__':
     main()
+    # test()
