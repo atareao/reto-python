@@ -24,7 +24,6 @@
 # SOFTWARE.
 
 from pathlib import Path
-from typing import Optional
 from PIL import Image
 import pilgram
 
@@ -36,7 +35,7 @@ class InstagramImage:
     _FILTROS: list[str] = pilgram.__all__[1:]
 
     def __init__(self, filein: Path, fileout: Path,
-                 args: Optional[dict[str, str]] = None) -> None:
+                 args: dict[str, str] = None) -> None:
 
         self.__filein = Path(filein)
         self.__fileout = Path(fileout)
