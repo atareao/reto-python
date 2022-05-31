@@ -35,7 +35,7 @@ class InstagramImage:
     _FILTROS: list[str] = pilgram.__all__[1:]
 
     def __init__(self, filein: Path, fileout: Path,
-                 args: dict[str, str] = None) -> None:
+                 args: dict[str, str]) -> None:
 
         self.__filein = Path(filein)
         self.__fileout = Path(fileout)
