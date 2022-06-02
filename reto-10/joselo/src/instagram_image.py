@@ -31,9 +31,6 @@ import pilgram
 class InstagramImage:
     """InstagramImage."""
 
-    # pilgram.__all__[0] es '__version__'
-    _FILTROS: list[str] = pilgram.__all__[1:]
-
     def __init__(self, filein: Path, fileout: Path,
                  args: dict[str, str]) -> None:
 
@@ -41,15 +38,8 @@ class InstagramImage:
         self.__fileout = Path(fileout)
         self.__filter = None
         filtro = args['filter'] if 'filter' in args else None
-        if filtro in self._FILTROS:
-            self.__filter = eval(f"pilgram.{filtro}")
-
-    # Por conveniencia, para que la función test pueda ejecutar todos los
-    # filtros, uno detrás de otro.
-    @classmethod
-    def filtros(cls) -> list:
-        """Acceso a InstagramImage._FILTROS desde objetos externos."""
-        return cls._FILTROS
+        if hasattr(pilgram, filtro):
+            self.__filter = getattr(pilgram, filtro)
 
     def check(self) -> bool:
         """check."""
@@ -80,7 +70,7 @@ def main():  # noqa
 
 def test():  # noqa
     filein = Path("/home/lorenzo/kk/bb.jpg")
-    for filter_name in InstagramImage.filtros():
+    for filter_name in pilgram.__all__[1:]:
         fileout = Path(f"/home/lorenzo/kk/bb_{filter_name}.jpg")
         action = InstagramImage(filein, fileout, {'filter': filter_name})
         if action.check():
