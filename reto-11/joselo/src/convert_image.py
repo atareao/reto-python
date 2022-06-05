@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Reto 10: clase Convert."""
+"""Reto 11: clase Convert."""
 
 # Copyright (c) 2022 José Lorenzo Nieto Corral <a.k.a. jlnc> <a.k.a. JoseLo>
 
@@ -61,4 +61,3 @@ def main():  # noqa
 
 if __name__ == '__main__':
     main()
-    # test()
