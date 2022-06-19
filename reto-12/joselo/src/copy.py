@@ -33,7 +33,7 @@ class Copy:
     """Copy."""
 
     def __init__(self, filein: Union[Path, str],
-                       fileout: Union[Path, str]) -> None:
+                   fileout: Union[Path, str]) -> None:
         self.__filein = Path(filein)
         self.__fileout = Path(fileout)
 
