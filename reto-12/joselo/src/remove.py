@@ -33,7 +33,7 @@ class Remove:
     def __init__(self, filein: Union[Path, str]) -> None:
         self.__filein = Path(filein)
 
-    def check(self) -> None:
+    def check(self) -> bool:
         """check."""
         return self.__filein.is_file()
 

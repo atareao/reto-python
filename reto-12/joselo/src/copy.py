@@ -37,7 +37,7 @@ class Copy:
         self.__filein = Path(filein)
         self.__fileout = Path(fileout)
 
-    def check(self) -> None:
+    def check(self) -> bool:
         """check."""
         return self.__filein.is_file() \
             and not self.__filein.is_symlink() \
@@ -51,26 +51,11 @@ class Copy:
 
 def main():  # noqa
     filein = Path('/home/lorenzo/kk/bb.jpg')
-    # fileout = Path(f/home/lorenzo/kk/bb_{filter_name}.jpg)
     fileout = Path('/home/lorenzo/kk/bb_copy.jpg')
     action = Copy(filein, fileout)
     if action.check():
         action.execute()
 
 
-def test():  # noqa
-    def intent(filein, fileout):
-        action = Copy(filein, fileout)
-        if action.check():
-            action.execute()
-    # Intento de copia de un enlace simbólico.
-    intent('../test/bb.jpg', '../test/bb_copy.jpg')
-    # Intento de copia de una imagen normal.
-    intent('../test/jupiter.jpg', '../test/jupiter_copy.jpg')
-    # Intento de copia de una imágen a un directorio.
-    intent('../test/jupiter.jpg', '../test/d')
-
-
 if __name__ == '__main__':
-    # main()
-    test()
+    main()
