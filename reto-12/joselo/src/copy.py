@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Reto 11: clase Convert."""
+"""Reto 12: clase Copy."""
 
 # Copyright (c) 2022 José Lorenzo Nieto Corral <a.k.a. jlnc> <a.k.a. JoseLo>
 
@@ -23,14 +23,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
 from pathlib import Path
-from PIL import Image
+import shutil
+from typing import Union
 
 
-class Convert:
-    """Convert."""
+class Copy:
+    """Copy."""
 
-    def __init__(self, filein: Path, fileout: Path) -> None:
+    def __init__(self, filein: Union[Path, str],
+                   fileout: Union[Path, str]) -> None:
         self.__filein = Path(filein)
         self.__fileout = Path(fileout)
 
@@ -38,23 +41,18 @@ class Convert:
         """check."""
         return self.__filein.is_file() \
             and not self.__filein.is_symlink() \
-            and self.__filein.suffix in ('.jpg', '.png', '.bmp') \
             and self.__fileout.parent.is_dir() \
-            and not self.__fileout.exists() \
-            and self.__fileout.suffix in ('.jpg', '.png', '.bmp', '.pdf')
+            and (self.__fileout.is_dir() or not self.__fileout.exists())
 
     def execute(self) -> None:
         """execute."""
-        with Image.open(self.__filein) as image:
-            if self.__filein.suffix == '.png':
-                image = image.convert('RGB')
-            image.save(self.__fileout)
+        shutil.copy(self.__filein, self.__fileout, follow_symlinks=False)
 
 
 def main():  # noqa
-    filein = Path("/home/lorenzo/kk/bb.jpg")
-    fileout = Path("/home/lorenzo/kk/bb.pdf")
-    action = Convert(filein, fileout)
+    filein = Path('/home/lorenzo/kk/bb.jpg')
+    fileout = Path('/home/lorenzo/kk/bb_copy.jpg')
+    action = Copy(filein, fileout)
     if action.check():
         action.execute()
 
