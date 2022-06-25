@@ -49,7 +49,7 @@ class Copy():
         False en caso contrario.
         '''
         print("Copy check()")
-        if Path(self.orig_file).exists():
+        if Path(self.orig_file).is_file():
             if not Path(self.dest_file).parent.exists():
                 print("El directorio destino no existe." +
                       "Se cancela la operación")
@@ -57,8 +57,11 @@ class Copy():
             if Path(self.dest_file).exists():
                 print("El archivo destino existe. Se cancela la operación.")
                 return False
-        print("Sin errores.")
-        return True
+            print("Sin errores.")
+            return True
+        else:
+            print("El fichero origen no existe.")
+            return False
 
     def execute(self):
         '''
@@ -99,10 +102,10 @@ class Remove():
         False en caso contrario.
         '''
         print("Remove check():")
-        if Path(self.file_name).exists():
+        if Path(self.file_name).is_file():
             print("Sin errores.")
             return True
-        print(f"{file_name} no existe.")
+        print(f"{self.file_name} no existe.")
         return False
 
     def execute(self):
