@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Reto 11: clase Convert."""
+"""Reto 12: clase Remove."""
 
 # Copyright (c) 2022 José Lorenzo Nieto Corral <a.k.a. jlnc> <a.k.a. JoseLo>
 
@@ -24,37 +24,27 @@
 # SOFTWARE.
 
 from pathlib import Path
-from PIL import Image
+from typing import Union
 
 
-class Convert:
-    """Convert."""
+class Remove:
+    """Clase Remove."""
 
-    def __init__(self, filein: Path, fileout: Path) -> None:
+    def __init__(self, filein: Union[Path, str]) -> None:
         self.__filein = Path(filein)
-        self.__fileout = Path(fileout)
 
     def check(self) -> bool:
         """check."""
-        return self.__filein.is_file() \
-            and not self.__filein.is_symlink() \
-            and self.__filein.suffix in ('.jpg', '.png', '.bmp') \
-            and self.__fileout.parent.is_dir() \
-            and not self.__fileout.exists() \
-            and self.__fileout.suffix in ('.jpg', '.png', '.bmp', '.pdf')
+        return self.__filein.is_file()
 
-    def execute(self) -> None:
+    def execute(self):
         """execute."""
-        with Image.open(self.__filein) as image:
-            if self.__filein.suffix == '.png':
-                image = image.convert('RGB')
-            image.save(self.__fileout)
+        self.__filein.unlink(missing_ok=True)
 
 
-def main():  # noqa
-    filein = Path("/home/lorenzo/kk/bb.jpg")
-    fileout = Path("/home/lorenzo/kk/bb.pdf")
-    action = Convert(filein, fileout)
+def main():
+    filein = Path('/home/lorenzo/kk/bb.jpg')
+    action = Remove(filein)
     if action.check():
         action.execute()
 
