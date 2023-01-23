@@ -1,12 +1,12 @@
-from image_utils import ImageUtils
+from image_utils import ImageResize
 
 def main():
-    imagein = '/home/paly/Pictures/kitty.jpeg'
-    imageout = '/home/paly/Pictures/resize_kitty.jpeg'
+    imagein = '/home/paly/kk/bb.jpg'
+    imageout = '/home/paly/kk/bbresize.jpg'
     args = {"w": 200,"h": 150}
-    imagen = ImageUtils(imagein, imageout, args)
+    imagen = ImageResize(imagein, imageout, args)
     if imagen.check():
-        imagen.resize_image() 
+        imagen.execute() 
 
 if __name__ == "__main__":
     main()

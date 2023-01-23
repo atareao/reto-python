@@ -1,7 +1,7 @@
 from pathlib import Path
 from PIL import Image
 
-class ImageUtils():
+class ImageResize():
     
     def __init__(self, imagein, imageout, args=()) -> None:
         self.__imagein = Path (imagein)
@@ -16,7 +16,7 @@ class ImageUtils():
             return False
         return True
     
-    def resize_image(self):
+    def execute(self):
         if "w" in self.__args and "h" in self.__args:
             if (self.__args['w']/self.__args['h']) != (self.__image.width/self.__image.height):
                 print("La Imagen de Salida no guarda las Proporciones")
