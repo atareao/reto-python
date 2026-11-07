@@ -15,16 +15,16 @@ Herramientas: sin `poetry` ni `pip-audit` instalados; Python 3.14.8; red disponi
 - **Grupo C — constraint (1 alerta)**: `reto-04/eleloi/pyproject.toml` declara `black = "^22.3.0"` (permite <24.3.0). Sin lock asociado.
 
 ## Tareas
-- [ ] T1 (Grupo A): editar `reto-10/joselo/requirements.txt` y `reto-11/joselo/requirements.txt`: `Pillow==9.1.1` → `Pillow>=13.0.0`. Mantener `numpy==1.22.4` y `pilgram==1.2.1` (sin alertas). Verificar que la spec de dependencias de `pilgram==1.2.1` admite Pillow 13.
-- [ ] T2 (Grupo B): en `reto-03,05,06,07/eleloi/pyproject.toml` subir constraints:
+- [x] T1 (Grupo A): editar `reto-10/joselo/requirements.txt` y `reto-11/joselo/requirements.txt`: `Pillow==9.1.1` → `Pillow>=13.0.0`. Mantener `numpy==1.22.4` y `pilgram==1.2.1` (sin alertas). Verificar que la spec de dependencias de `pilgram==1.2.1` admite Pillow 13.
+- [x] T2 (Grupo B): en `reto-03,05,06,07/eleloi/pyproject.toml` subir constraints:
   - `black = "^22.3.0"` → "^26.10.1"
   - `pyd'antic = "^1.9.0"` → "^1.10.13"
   - `pytest = "^7.1.2"` → "^9.0.3" (reto-03, 06, 07)
   - reto-05 usa `pytest-cov = "^3.0.0"` y `coverage = "^6.3.2"`; si bloquean pytest 9, subirlos mínimamente (`pytest-cov ^6`, `coverage ^7`) para permitir la resolución.
-- [ ] T3 (Grupo B): regenerar los 4 `poetry.lock` con poetry (instalar poetry en un venv en `/tmp/opencode`). Formato lock v1.1 actual; poetry moderno generará lock-version 2.x (diff grande pero válido).
-- [ ] T4 (Grupo C): editar `reto-04/eleloi/pyproject.toml`: `black = "^22.3.0"` → "^26.10.1".
-- [ ] T5: validar que en cada lock regenerado `black>=26.10.1`, `pydantic>=1.10.13`, `pytest>=9.0.3`, y que Pillow en los requirements es `>=13.0.0 `.
-- [ ] T6: commit en rama `feature/fix-dependabot-alerts` y PR a `main `.
+- [x] T3 (Grupo B): regenerar los 4 `poetry.lock` con poetry (instalar poetry en un venv en `/tmp/opencode`). Formato lock v1.1 actual; poetry moderno generará lock-version 2.x (diff grande pero válido).
+- [x] T4 (Grupo C): editar `reto-04/eleloi/pyproject.toml`: `black = "^22.3.0"` → "^26.10.1".
+- [x] T5: validar que en cada lock regenerado `black>=26.10.1`, `pydantic>=1.10.13`, `pytest>=9.0.3`, y que Pillow en los requirements es `>=13.0.0 `.
+- [x] T6: commit en rama `feature/fix-dependabot-alerts` y PR a `main `.
 
 ## Validación / Criterios de aceptación
 - `rg` confirma `Pillow>=13.0.0` en ambos requirements.
